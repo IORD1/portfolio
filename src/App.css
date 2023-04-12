@@ -5,29 +5,32 @@
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
 }
 
 .App svg{
   width: 100%;
-  position: relative;
+  z-index: 2;  
+;
 }
 .iconholder{
   height: calc(100vh - 320px);
   width: 100% ;
   /* background-color: aqua; */
   position: relative;
+  z-index: 2;
 }
 #cubeicons{
   rotate: 20deg;
   position: absolute;
-  left: 90vw;
-  top: 30px;
+  right: -10px;
+  top: -50px;
 }
 
 #jsicon{
   rotate: -30deg;
   position: absolute;
-  left: 85vw;
+  right: -120px;
   top: 40%;
 }
 
@@ -49,4 +52,28 @@
   rotate: -30deg;
   position: absolute;
   top: -20px;
+}
+
+#htmlicon{
+  rotate: 20deg;
+  position: absolute;
+  top: -50px;
+  left : 30%;
+}
+
+#mobdevicon{
+  rotate: 20deg;
+  position: absolute;
+  top: -50px;
+  left : 60%;
+}
+
+.herocontainer{
+  background-color: white;
+  z-index: 3;
+  height: 90vh;
+  width: 80vw;
+  top: 10vh;
+  left: 10vw;
+  position: absolute;
 }
