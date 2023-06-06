@@ -10,9 +10,10 @@ import {ReactComponent as Htmlogo} from './assests/html_FILL0_wght400_GRAD0_opsz
 import {ReactComponent as Mobdevlogo} from './assests/developer_mode_FILL0_wght400_GRAD0_opsz48.svg';
 import { ReactComponent as Namelogo } from './assests/motion_mode_FILL0_wght400_GRAD0_opsz48.svg';
 import { ReactComponent as Starsvg } from './assests/brightness_empty_FILL0_wght400_GRAD0_opsz48.svg';
+import { ReactComponent as Starcreative } from './assests/magic_button_FILL0_wght400_GRAD0_opsz48.svg';
 
 
-
+// Fredericka the Great
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
         </nav>
 
         <div className='restcontainer'>
+            <div className='hero'>
+              <div className='herotext1'>Hi, I'm pratham a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
+            </div>
+          
             <div className='blackstrip'>
             <Starsvg fill='#E64D33' style={{ height: 50, width: 50 }} id="stripstars"/>
             <p>DATA STRUCTURE</p>
@@ -61,6 +66,10 @@ function App() {
             <Starsvg fill='#E64D33' style={{ height: 50, width: 50 }} id="stripstars"/>
             <p>ALGORITHMS</p>
             </div>
+
+            hi th is is Great
+            <h1>hellow there</h1>
+            <h2> its project</h2>
         </div>
       </div>
 

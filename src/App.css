@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Six+Caps&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+Miao&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
 
 
 .App{
@@ -93,6 +93,7 @@
 .herocontainer > nav > div{
   width: 33%;
   height: 100%;
+
 }
 
 .namelogo{
@@ -153,7 +154,8 @@
   width: 100%;
   height: calc(95vh - 100px);
   position: relative;  
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   /* background-color: rebeccapurple; */
 }
 
@@ -173,4 +175,62 @@
 .blackstrip p{
   color: white;
   font-size: 20px;
+}
+
+.hero{
+  /* background-color: red; */
+  height: 80%;
+  width: 100%;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.herotext1{
+  font-family: 'Fredericka the Great', cursive;
+  font-size: 60px;
+  width: 60%;
+  height: auto;
+  display:inline-block;
+} 
+
+
+
+@keyframes textShine {
+  0% {
+      background-position: 0% 50%;
+  }
+  100% {
+      background-position: 100% 50%;
+  }
+}
+
+
+#herotextsvg{
+  fill: crimson;
+}
+
+#gradienttext{
+  /* background: linear-gradient(
+    to right,
+    #7953cd 20%,
+    #00affa 30%,
+    #0190cd 70%,
+    #764ada 80%
+  ); */
+
+  background: linear-gradient(
+    60deg,
+    #EA3883 20%,
+    #ABDAFB 40%,
+    #1E2AE6 60%,
+    #E64D33 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  background-size: 500% auto;
+  animation: textShine 4s ease infinite;
 }
