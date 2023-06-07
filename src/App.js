@@ -51,7 +51,7 @@ function App() {
 
         <div className='restcontainer'>
             <div className='hero'>
-              <div className='herotext1'>Hi, I'm pratham a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
+              <div className='herotext1'>Hi, I'm a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
             </div>
           
             <div className='blackstrip'>
@@ -67,9 +67,13 @@ function App() {
             <p>ALGORITHMS</p>
             </div>
 
-            hi th is is Great
-            <h1>hellow there</h1>
-            <h2> its project</h2>
+
+            <p className='projectHeader'>Projects</p>
+            <div className="aboutContainer">
+              <div className="aboutContainerFilter">
+                
+              </div>
+            </div>
         </div>
       </div>
 

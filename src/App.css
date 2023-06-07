@@ -2,6 +2,14 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+Miao&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
 
+@keyframes textShine {
+  0% {
+      background-position: 0% 50%;
+  }
+  100% {
+      background-position: 100% 50%;
+  }
+}
 
 .App{
   background-color: black;
@@ -81,6 +89,9 @@
   top: 5vh;
   left: 10vw;
   position: absolute;
+
+
+
 }
 
 .herocontainer nav{
@@ -144,10 +155,30 @@
   cursor: pointer;
   background-color: #f3f1efb0;
   transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  animation: textShine 4s ease infinite; 
+
 }
 
 .letstalkbutton:hover{
-  background-color: #f0e6dcb0;
+  background: linear-gradient(#F3F1EF, #F3F1EF) padding-box,
+    linear-gradient(-60deg,
+    #EA3883 30%,
+    #ABDAFB 60%,
+    #e66e1e 90%) border-box;
+  border: 2px solid transparent;
+  animation: textShine 4s ease infinite; 
+
+
+/* background: linear-gradient(
+    -60deg,
+    #EA3883 20%,
+    #ABDAFB 40%,
+    #1E2AE6 60%,
+    #E64D33 80%
+  ); */
+  /* 
+
+  background-size: 500% auto;*/
 }
 
 .restcontainer{
@@ -170,6 +201,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+
 }
 
 .blackstrip p{
@@ -190,21 +223,14 @@
 .herotext1{
   font-family: 'Fredericka the Great', cursive;
   font-size: 60px;
-  width: 60%;
+  width: 70%;
   height: auto;
   display:inline-block;
+  text-transform: uppercase;
 } 
 
 
 
-@keyframes textShine {
-  0% {
-      background-position: 0% 50%;
-  }
-  100% {
-      background-position: 100% 50%;
-  }
-}
 
 
 #herotextsvg{
@@ -221,7 +247,7 @@
   ); */
 
   background: linear-gradient(
-    60deg,
+    -60deg,
     #EA3883 20%,
     #ABDAFB 40%,
     #1E2AE6 60%,
@@ -233,4 +259,39 @@
   text-fill-color: transparent;
   background-size: 500% auto;
   animation: textShine 4s ease infinite;
+}
+
+/* --------------------ABOUT------------------ */
+.projectHeader{
+  width: 100%;
+  text-align: center;
+  font-size: 60px;
+  font-family: 'Fredericka the Great', cursive;
+  margin-top: 200px;
+  line-height: 0;
+}
+
+
+.aboutContainer{
+  height: 90%;
+  width: 100%;
+  background-image: url('./assests/patternb.png');
+  background-size: 200px 100px;
+  position: relative;
+}
+
+.aboutContainerFilter{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  /* background: radial-gradient(transparent,transparent,#f3f1ef94,#f3f1ef94,#F3F1EF,#F3F1EF); */
+  background: linear-gradient(#F3F1EF,#f3f1ef94,transparent,transparent,#f3f1ef94,#F3F1EF),url(https://grainy-gradients.vercel.app/noise.svg);
+
+
+/* 
+  background: linear-gradient(to right, black, transparent),
+  url(https://grainy-gradients.vercel.app/noise.svg);*/
+filter:  brightness(100%); 
 }
