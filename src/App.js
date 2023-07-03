@@ -51,6 +51,7 @@ function App() {
 
         <div className='restcontainer'>
             <div className='hero'>
+              {/* <div className='noisefilter'></div> */}
               <div className='herotext1'>Hi, I'm a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
             </div>
           
@@ -75,6 +76,7 @@ function App() {
               </div>
             </div>
         </div>
+
       </div>
 
     </div>

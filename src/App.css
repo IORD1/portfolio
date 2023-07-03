@@ -24,7 +24,7 @@
 .App svg{
   width: 100%;
   z-index: 2;  
-;
+
 }
 .iconholder{
   height: calc(100vh - 320px);
@@ -89,9 +89,19 @@
   top: 5vh;
   left: 10vw;
   position: absolute;
+  /* background:linear-gradient(#F3F1EF,#F3F1EF),url('https://grainy-gradients.vercel.app/noise.svg'); */
 
 
+}
 
+.noisefilter{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background:linear-gradient(#e2e0df8e,#e2e0df8e),url('https://grainy-gradients.vercel.app/noise.svg');
+  top: 0px;
+  left: 0px;
+  z-index: 0;
 }
 
 .herocontainer nav{
@@ -160,13 +170,9 @@
 }
 
 .letstalkbutton:hover{
-  background: linear-gradient(#F3F1EF, #F3F1EF) padding-box,
-    linear-gradient(-60deg,
-    #EA3883 30%,
-    #ABDAFB 60%,
-    #e66e1e 90%) border-box;
-  border: 2px solid transparent;
+
   animation: textShine 4s ease infinite; 
+  background:linear-gradient(#f3f1ef34,#f3f1ef3a),url('https://grainy-gradients.vercel.app/noise.svg');
 
 
 /* background: linear-gradient(
@@ -227,6 +233,7 @@
   height: auto;
   display:inline-block;
   text-transform: uppercase;
+  z-index: 1;
 } 
 
 
@@ -292,6 +299,6 @@
 
 /* 
   background: linear-gradient(to right, black, transparent),
-  url(https://grainy-gradients.vercel.app/noise.svg);*/
+  url(https://grainy-gradients.vercel.app/noise.svg);*/ 
 filter:  brightness(100%); 
 }
