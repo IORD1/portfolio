@@ -17,6 +17,15 @@ import p3 from './assests/projectimg/p3-genre.png';
 import p4 from './assests/projectimg/affordybot.jpg';
 import p5 from './assests/projectimg/cesa.png';
 import {ReactComponent as FallGuy} from './assests/MessyDoodle.svg';
+
+import l1 from './assests/logos/react-js.png';
+import l2 from './assests/logos/JavaScript-logo.png';
+import l3 from './assests/logos/exprss.png';
+import l4 from './assests/logos/mongo.png';
+import l5 from './assests/logos/nodejs-logo.png';
+
+
+
 // Fredericka the Great
 
 function App() {
@@ -77,23 +86,42 @@ function App() {
 
             <p className='projectHeader'>Projects</p>
             <div className="aboutContainer">
-              <div className="aboutContainerFilter">
-              </div>
+              <div className="aboutContainerFilter"></div>
                   <div className='projectStrip'>
                     <div className="projectContainer" style={{ backgroundColor : '#1a031765'}}><div className='projectImg' style={{ backgroundImage : `url(${p1})`}}></div><p className="projectName">Animephile</p><p className='projectDescription'>A reminder for new releases of anime episode</p><div className='projectMoreBtn'>View more</div></div>
                     <div className="projectContainer" style={{ backgroundColor : '#a4c4b56b'}}><div className='projectImg' style={{ backgroundImage : `url(${p2})`}}></div><p className="projectName">LECS Chat App</p><p className='projectDescription'>A chat app underdevelopment using lec signaturing</p><div className='projectMoreBtn'>View more</div></div>
-                    <div className="projectContainer" style={{ backgroundColor : '#8becff67'}}><div className='projectImg' style={{ backgroundImage : `url(${p3})`}}></div><p className="projectName">Movie Genre Classifier</p><p className='projectDescription'>Data science project to categorize movies based on it's overview into genres</p><div className='projectMoreBtn'>View more</div></div>
-                    <div className="projectContainer" style={{ backgroundColor : 'rgba(151, 150, 150, 0.479)'}}><div className='projectImg' style={{ backgroundImage : `url(${p4})`}}></div><p className="projectName">Calculate Optimal EMI</p><p className='projectDescription'>A FinHack submittion that suggest if user should purchase property for given EMI options</p><div className='projectMoreBtn'>View more</div></div>
                     <div className="projectContainer" style={{ backgroundColor : 'rgba(151, 150, 150, 0.479)'}}><div className='projectImg' style={{ backgroundImage : `url(${p5})`}}></div><p className="projectName">CESA Website</p><p className='projectDescription'>Built Homescreen of Computer Engineering Student Association</p><div className='projectMoreBtn'>View more</div></div>
+                    <div className="projectContainer" style={{ backgroundColor : 'rgba(151, 150, 150, 0.479)'}}><div className='projectImg' style={{ backgroundImage : `url(${p4})`}}></div><p className="projectName">Calculate Optimal EMI</p><p className='projectDescription'>A FinHack submittion that suggest if user should purchase property for given EMI options</p><div className='projectMoreBtn'>View more</div></div>
+                    <div className="projectContainer" style={{ backgroundColor : '#8becff67'}}><div className='projectImg' style={{ backgroundImage : `url(${p3})`}}></div><p className="projectName">Movie Genre Classifier</p><p className='projectDescription'>Data science project to categorize movies based on it's overview into genres</p><div className='projectMoreBtn'>View more</div></div>
 
                   </div>
             </div>
 
             <p className='projectHeader'>My Tech Stack</p>
-            <div className="aboutContainer">
-              <div className="aboutContainerFilter">
+            <div className="aboutContainer smallAboutContainer">
+              <div className="aboutContainerFilter"></div>
+              <div className='logoHolder'>
+                
+                <div className='logoRow'>
+                  <div className='logoBox'><img src={l1} alt="technologies i know"></img></div>
+                  <div className='logoBox'><img src={l2} alt="technologies i know"></img></div>
+                  <div className='logoBox'><img src={l5} alt="technologies i know"></img></div>
+                </div>
+                <div className='logoRow'>
+                  <div className='logoBox bigBox'><img src={l3} alt="technologies i know"  style={{ filter:'invert(1)'}}></img></div>
+                  <div className='logoBox bigBox'><img src={l4} alt="technologies i know"></img></div>
+                </div>
+
               </div>
             </div>
+
+            <p className='projectHeader'>Something Else</p>
+            <div className="someContainer">
+              
+            </div>
+
+
+          
 
 
         </div>
