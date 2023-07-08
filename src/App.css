@@ -196,6 +196,16 @@
   /* background-color: rebeccapurple; */
 }
 
+.restcontainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.restcontainer {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .blackstrip{
   background-color: black;
   height: 100px;
@@ -311,15 +321,25 @@ filter:  brightness(100%);
 
 .projectStrip{
   height: 450px;
-  width: 100%;
+  width: 90%;
   transform: rotate(5deg);
   display: flex;
   align-items: center;
   padding-left: 100px;
   /* background-color: #abdafb69; */
   /* backdrop-filter: blur(4px); */
+  overflow: scroll;
 }
 
+.projectStrip::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.projectStrip {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 
 .projectContainer{
   height: 90%;
@@ -331,12 +351,11 @@ filter:  brightness(100%);
   padding: 10px;
 
 
-
   background-color: #fbdbab69;
   backdrop-filter: blur(4px);
   border-radius: 4px;
   margin: 0px 15px 0px 0px;
-  background-color: #a4c4b56b;
+  background-color: rgba(151, 150, 150, 0.479);
 
 
   -webkit-transition: all .5s;
@@ -357,7 +376,7 @@ filter:  brightness(100%);
 }
 
 .projectImg{
-  width: 100%;
+  width: 240px;
   height: 45%;
   background-size: cover;
   -webkit-transition: all .5s;

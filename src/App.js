@@ -13,6 +13,10 @@ import { ReactComponent as Starsvg } from './assests/brightness_empty_FILL0_wght
 import { ReactComponent as Starcreative } from './assests/magic_button_FILL0_wght400_GRAD0_opsz48.svg';
 import p1 from './assests/projectimg/Homescreen.png';
 import p2 from './assests/projectimg/p2-lecs.jpg';
+import p3 from './assests/projectimg/p3-genre.png';
+import p4 from './assests/projectimg/affordybot.jpg';
+import p5 from './assests/projectimg/cesa.png';
+import {ReactComponent as FallGuy} from './assests/MessyDoodle.svg';
 // Fredericka the Great
 
 function App() {
@@ -53,6 +57,8 @@ function App() {
             <div className='hero'>
               {/* <div className='noisefilter'></div> */}
               <div className='herotext1'>Hi, I'm a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
+              <FallGuy fill='#E64D33' style={{ height:443, width: 443 , position: 'absolute', right: '0px', bottom:'-80px',transform:"scale(-1,1)"}} id="fallguy"/>
+
             </div>
           
             <div className='blackstrip'>
@@ -76,9 +82,20 @@ function App() {
                   <div className='projectStrip'>
                     <div className="projectContainer" style={{ backgroundColor : '#1a031765'}}><div className='projectImg' style={{ backgroundImage : `url(${p1})`}}></div><p className="projectName">Animephile</p><p className='projectDescription'>A reminder for new releases of anime episode</p><div className='projectMoreBtn'>View more</div></div>
                     <div className="projectContainer" style={{ backgroundColor : '#a4c4b56b'}}><div className='projectImg' style={{ backgroundImage : `url(${p2})`}}></div><p className="projectName">LECS Chat App</p><p className='projectDescription'>A chat app underdevelopment using lec signaturing</p><div className='projectMoreBtn'>View more</div></div>
+                    <div className="projectContainer" style={{ backgroundColor : '#8becff67'}}><div className='projectImg' style={{ backgroundImage : `url(${p3})`}}></div><p className="projectName">Movie Genre Classifier</p><p className='projectDescription'>Data science project to categorize movies based on it's overview into genres</p><div className='projectMoreBtn'>View more</div></div>
+                    <div className="projectContainer" style={{ backgroundColor : 'rgba(151, 150, 150, 0.479)'}}><div className='projectImg' style={{ backgroundImage : `url(${p4})`}}></div><p className="projectName">Calculate Optimal EMI</p><p className='projectDescription'>A FinHack submittion that suggest if user should purchase property for given EMI options</p><div className='projectMoreBtn'>View more</div></div>
+                    <div className="projectContainer" style={{ backgroundColor : 'rgba(151, 150, 150, 0.479)'}}><div className='projectImg' style={{ backgroundImage : `url(${p5})`}}></div><p className="projectName">CESA Website</p><p className='projectDescription'>Built Homescreen of Computer Engineering Student Association</p><div className='projectMoreBtn'>View more</div></div>
 
                   </div>
             </div>
+
+            <p className='projectHeader'>My Tech Stack</p>
+            <div className="aboutContainer">
+              <div className="aboutContainerFilter">
+              </div>
+            </div>
+
+
         </div>
 
       </div>
