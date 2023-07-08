@@ -11,8 +11,8 @@ import {ReactComponent as Mobdevlogo} from './assests/developer_mode_FILL0_wght4
 import { ReactComponent as Namelogo } from './assests/motion_mode_FILL0_wght400_GRAD0_opsz48.svg';
 import { ReactComponent as Starsvg } from './assests/brightness_empty_FILL0_wght400_GRAD0_opsz48.svg';
 import { ReactComponent as Starcreative } from './assests/magic_button_FILL0_wght400_GRAD0_opsz48.svg';
-
-
+import p1 from './assests/projectimg/Homescreen.png';
+import p2 from './assests/projectimg/p2-lecs.jpg';
 // Fredericka the Great
 
 function App() {
@@ -72,8 +72,12 @@ function App() {
             <p className='projectHeader'>Projects</p>
             <div className="aboutContainer">
               <div className="aboutContainerFilter">
-                
               </div>
+                  <div className='projectStrip'>
+                    <div className="projectContainer" style={{ backgroundColor : '#1a031765'}}><div className='projectImg' style={{ backgroundImage : `url(${p1})`}}></div><p className="projectName">Animephile</p><p className='projectDescription'>A reminder for new releases of anime episode</p><div className='projectMoreBtn'>View more</div></div>
+                    <div className="projectContainer" style={{ backgroundColor : '#a4c4b56b'}}><div className='projectImg' style={{ backgroundImage : `url(${p2})`}}></div><p className="projectName">LECS Chat App</p><p className='projectDescription'>A chat app underdevelopment using lec signaturing</p><div className='projectMoreBtn'>View more</div></div>
+
+                  </div>
             </div>
         </div>
 
