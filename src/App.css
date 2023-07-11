@@ -328,7 +328,8 @@ filter:  brightness(100%);
   padding-left: 100px;
   /* background-color: #abdafb69; */
   /* backdrop-filter: blur(4px); */
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: visible;
 }
 
 .projectStrip::-webkit-scrollbar {
@@ -436,7 +437,7 @@ filter:  brightness(100%);
 
 .logoHolder{
   width: 70%;
-  height: 70%;
+  height: 100%;
   /* border :2px dotted grey; */
 
 }

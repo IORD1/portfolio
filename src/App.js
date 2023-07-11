@@ -23,7 +23,9 @@ import l2 from './assests/logos/JavaScript-logo.png';
 import l3 from './assests/logos/exprss.png';
 import l4 from './assests/logos/mongo.png';
 import l5 from './assests/logos/nodejs-logo.png';
-
+import l6 from './assests/logos/cpp.png';
+import l7 from './assests/logos/python.png';
+import l8 from './assests/logos/java.png';
 
 
 // Fredericka the Great
@@ -111,7 +113,11 @@ function App() {
                   <div className='logoBox bigBox'><img src={l3} alt="technologies i know"  style={{ filter:'invert(1)'}}></img></div>
                   <div className='logoBox bigBox'><img src={l4} alt="technologies i know"></img></div>
                 </div>
-
+                <div className='logoRow'>
+                  <div className='logoBox'><img src={l6} alt="technologies i know"></img></div>
+                  <div className='logoBox'><img src={l7} alt="technologies i know"></img></div>
+                  <div className='logoBox'><img src={l8} alt="technologies i know"></img></div>
+                </div>
               </div>
             </div>
 
