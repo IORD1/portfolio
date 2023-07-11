@@ -66,8 +66,7 @@ function App() {
             <div className='hero'>
               {/* <div className='noisefilter'></div> */}
               <div className='herotext1'>Hi, I'm a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
-              <FallGuy fill='#E64D33' style={{ height:443, width: 443 , position: 'absolute', right: '0px', bottom:'-80px',transform:"scale(-1,1)"}} id="fallguy"/>
-
+              <FallGuy fill='#E64D33' style={{ height:443, width: 443 , position: 'absolute', right: '-10px', bottom:'-50px',transform:"scale(-1,1)"}} id="fallguy"/>
             </div>
           
             <div className='blackstrip'>
