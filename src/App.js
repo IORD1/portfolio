@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import './App.css';
-import cube from './assests/deployed_code_FILL0_wght400_GRAD0_opsz48.svg'
 import { ReactComponent as Cubes } from './assests/deployed_code_FILL0_wght400_GRAD0_opsz48.svg';
 import {ReactComponent as Jslogo} from './assests/javascript_FILL0_wght400_GRAD0_opsz48.svg';
 import {ReactComponent as Terminallogo} from './assests/terminal_FILL0_wght400_GRAD0_opsz48.svg';
@@ -52,9 +50,9 @@ function App() {
             <p className='namehead'>PRATHMESH INGOLE</p>
           </div>
           <div className='nav-buttons'>
-              <a href='#' className='nav-btn'>HOME</a>
-              <a href='#' className='nav-btn'>ABOUT</a>
-              <a href='#' className='nav-btn'>PROJECTS</a>
+              <a href='#home' className='nav-btn'>HOME</a>
+              <a href='#projects' className='nav-btn'>ABOUT</a>
+              <a href='#about' className='nav-btn'>PROJECTS</a>
 
           </div>
           <div className='letstalkcontainer'>
@@ -64,7 +62,7 @@ function App() {
           </div>
         </nav>
 
-        <div className='restcontainer'>
+        <div className='restcontainer' id="home">
             <div className='hero'>
               {/* <div className='noisefilter'></div> */}
               <div className='herotext1'>Hi, I'm a <span id="gradienttext">creative</span> <Starcreative style={{ height: 60, width: 60 }} id="herotextsvg"/> developer based in Pune</div>
@@ -86,7 +84,7 @@ function App() {
             </div>
 
 
-            <p className='projectHeader'>Projects</p>
+            <p className='projectHeader' id='projects'>Projects</p>
             <div className="aboutContainer">
               <div className="aboutContainerFilter"></div>
                   <div className='projectStrip'>
@@ -99,7 +97,7 @@ function App() {
                   </div>
             </div>
 
-            <p className='projectHeader'>My Tech Stack</p>
+            <p className='projectHeader' id='about'>My Tech Stack</p>
             <div className="aboutContainer smallAboutContainer">
               <div className="aboutContainerFilter"></div>
               <div className='logoHolder'>
