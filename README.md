@@ -1,3 +1,20 @@
+### Just My Portfolio 
+### visit it here : <a href="https://prathmeshingole.co">prathmeshigole.co</a>
+# 
+preview : 
+
+
+![77shots_so](https://github.com/IORD1/portfolio/assets/91962775/2395c151-acab-4b95-b6c5-0d1f8e4928ed)
+
+
+![803shots_so](https://github.com/IORD1/portfolio/assets/91962775/f8d696f1-bb0b-442f-9c1d-6b3f922cb6bb)
+
+
+![317shots_so](https://github.com/IORD1/portfolio/assets/91962775/416e9ed7-9a6e-4105-95c4-9999a4463b2d)
+
+
+# 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
