@@ -505,6 +505,17 @@ filter:  brightness(100%);
   background-repeat: no-repeat, repeat;
   background-attachment: scroll, fixed;
   cursor: auto;
+  position: relative;
+}
+
+.someContainerFilter{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(#F3F1EF,#f3f1ef94,transparent,transparent,#f3f1ef94,#F3F1EF),url(https://grainy-gradients.vercel.app/noise.svg);
+filter:  brightness(100%); 
 }
 
 

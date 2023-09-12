@@ -144,6 +144,8 @@ function App() {
 
             <p className='projectHeader'>Worked with</p>
             <div className="someContainer">
+            <div className="someContainerFilter"></div>
+
               <>IOFT</>
               <>Colege group</>
               
