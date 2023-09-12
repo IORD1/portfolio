@@ -142,8 +142,10 @@ function App() {
               </div>
             </div>
 
-            <p className='projectHeader'>Something Else</p>
+            <p className='projectHeader'>Worked with</p>
             <div className="someContainer">
+              <>IOFT</>
+              <>Colege group</>
               
             </div>
 
