@@ -151,6 +151,16 @@ function App() {
               
             </div>
 
+            <div className='footer-cointainer'>
+            <div className="footerContainerFilter"></div>
+
+              <div className='footer-banner'>
+              </div>
+              <div className='footer-end'>
+              
+              </div>
+              <div className='footer-profile'></div>
+            </div>
 
           
 

@@ -518,7 +518,49 @@ filter:  brightness(100%);
 filter:  brightness(100%); 
 }
 
+.footerContainerFilter{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(#F3F1EF,#f3f1ef94,transparent,transparent,transparent,transparent);
+filter:  brightness(100%); 
+}
 
+
+.footer-cointainer{
+  height: 100%;
+  width: 100%;
+  background-color: maroon;
+  position: relative;
+
+}
+
+.footer-banner{
+  height: 50%;
+  width: 100%;
+  background-image: url(./assests/footer/cover-image.png);
+  background-size: cover;
+}
+.footer-end{
+  height: 50%;
+  width: 100%;
+  background-color: black ;
+}
+
+.footer-profile{
+  height: 50%;
+  aspect-ratio: 1;
+  background-color: #1E2AE6;
+  position: absolute;
+  top: 25%;
+  left: 38%;
+  background-image: url(./assests/footer/profile-pic.png);
+  background-size: cover  ;
+  border-radius: 50%;
+  border: white 4px dashed;
+}
 
 
 
