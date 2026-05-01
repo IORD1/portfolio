@@ -96,9 +96,11 @@
           "status": "Personal use"
         },
         "screens": [
-          { "src": "/projects/scheduler-1.png", "alt": "Project screenshot" },
-          { "src": "/projects/scheduler-2.png", "alt": "Project screenshot" },
-          { "src": "/projects/scheduler-3.png", "alt": "Project screenshot" }
+          { "src": "/projects/schedule-1.png", "alt": "Project screenshot" },
+          { "src": "/projects/schedule-2.png", "alt": "Project screenshot" },
+          { "src": "/projects/schedule-3.png", "alt": "Project screenshot" },
+          { "src": "/projects/schedule-4.png", "alt": "Project screenshot" },
+          { "src": "/projects/schedule-5.png", "alt": "Project screenshot" }
         ],
         "sections": [
           {
@@ -253,7 +255,7 @@
         "tags": ["C++", "SFML"]
       },
       "links": {
-        "github": "https://github.com/IORD1"
+        "github": "https://github.com/IORD1/shootIt--"
       },
       "page": {
         "title": ["ShootIt++.", "A space shooter that grows on you."],
@@ -265,9 +267,7 @@
           "status": "Playable"
         },
         "screens": [
-          { "src": "/projects/ness-1.png", "alt": "Project screenshot" },
-          { "src": "/projects/ness-2.png", "alt": "Project screenshot" },
-          { "src": "/projects/ness-3.png", "alt": "Project screenshot" }
+          { "src": "/projects/shootit-1.png", "alt": "Project screenshot" }
         ],
         "sections": [
           {
@@ -293,10 +293,10 @@
       "name": "Animephile",
       "card": {
         "description": "Anime tracker with email reminders for new episodes.",
-        "tags": ["Next.js", "Firebase"]
+        "tags": ["Next.js", "Firebase Auth"]
       },
       "links": {
-        "github": "https://github.com/IORD1"
+        "github": "https://github.com/IORD1/Animephile"
       }
     },
     "genre-predictor": {
@@ -306,7 +306,7 @@
         "tags": ["Python", "SVM"]
       },
       "links": {
-        "github": "https://github.com/IORD1"
+        "github": "https://github.com/IORD1/GenrePredictor"
       }
     },
     "sleep-state": {
