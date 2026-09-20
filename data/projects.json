@@ -1,0 +1,414 @@
+{
+  "selectedWork": [
+    "ness",
+    "smart-scheduler",
+    "chat-lecs",
+    "sort-alyzer",
+    "soundscrapper",
+    "shootit"
+  ],
+  "sideQuests": [
+    "animephile",
+    "genre-predictor",
+    "sleep-state",
+    "job-portal",
+    "git-kitty",
+    "traffic-light",
+    "cordova-weather"
+  ],
+  "projects": {
+    "ness": {
+      "name": "NESS — Neighborhood Evaluation System",
+      "navTitle": "NESS",
+      "card": {
+        "size": "wide",
+        "description": "Data-driven ranking of neighborhoods. Won \"Best GUI\" at CONVENE 2k24.",
+        "tags": ["React", "Flask", "Google Maps", "Analytics"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/NESS"
+      },
+      "page": {
+        "title": ["NESS — Neighborhood Evaluation & Scoring System."],
+        "subtitle": "A data-driven ranking engine for neighborhoods. Pulls from Google Maps, layers analytics on top, and surfaces a livability score you can actually trust. Awarded \"Best GUI\" at CONVENE 2k24.",
+        "meta": {
+          "year": "2024",
+          "role": "Design + Engineering",
+          "stack": "React · Flask · Maps",
+          "status": "Award-winning"
+        },
+        "screens": [
+          { "src": "/projects/ness-1.png", "alt": "NESS — cover" },
+          { "src": "/projects/ness-2.png", "alt": "NESS — product screenshot" },
+          { "src": "/projects/ness-3.png", "alt": "NESS — features" }
+        ],
+        "sections": [
+          {
+            "heading": "Overview",
+            "paragraphs": [
+              "City life is full of invisible trade-offs — safety here, air quality there, schools over there. NESS flattens all of that into something you can read at a glance: a ranked score per neighborhood, backed by data.",
+              "We pulled civic and location data, ran it through a Flask analytics backend, and rendered the results in a React interface that judges called the cleanest in the room. The \"Best GUI\" trophy at CONVENE 2k24 wasn't a fluke — it was the whole point."
+            ]
+          },
+          {
+            "heading": "What I built",
+            "list": [
+              "React frontend with interactive Maps overlay and live-updating scores",
+              "Flask analytics service combining multiple data signals into one rank",
+              "A comparison view so users could weigh two neighborhoods head-to-head",
+              "End-to-end design — from judge-pleasing UI to the color system used throughout"
+            ]
+          },
+          {
+            "heading": "Team",
+            "team": [
+              {
+                "name": "Prathmesh Ingole",
+                "handle": "@IORD1",
+                "href": "https://github.com/IORD1",
+                "avatar": "/projects/team/prathmesh.jpeg",
+                "isYou": true
+              },
+              {
+                "name": "Hitesh Jain",
+                "handle": "@hiteshjain48",
+                "href": "https://github.com/hiteshjain48",
+                "avatar": "/projects/team/hitesh.jpeg"
+              },
+              {
+                "name": "Shubham",
+                "handle": "@Shubham141102",
+                "href": "https://github.com/Shubham141102",
+                "avatar": "/projects/team/shubham.png"
+              },
+              {
+                "name": "Sarang",
+                "handle": "@Sarang0711",
+                "href": "https://github.com/Sarang0711",
+                "avatar": "/projects/team/sarang.jpeg"
+              }
+            ]
+          },
+          {
+            "heading": "Stack",
+            "stackLine": "React · Google Maps API · Flask · Python · Pandas · Plotly"
+          }
+        ]
+      }
+    },
+    "smart-scheduler": {
+      "name": "Smart Scheduler",
+      "navTitle": "Smart Scheduler",
+      "card": {
+        "size": "narrow",
+        "description": "AI-optimized daily schedules, plugged into Google Calendar.",
+        "tags": ["GenAI", "React"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/smart-sheduler"
+      },
+      "page": {
+        "title": ["Smart Scheduler.", "Your calendar, thought about."],
+        "subtitle": "A planner that looks at your todos, your prescheduled events and what time of day you actually get things done — then proposes a schedule you'd have written yourself, if you had the time. Approve it with one tap and it writes straight back to Google Calendar.",
+        "meta": {
+          "year": "2024",
+          "role": "Solo build",
+          "stack": "Next.js · Gemini · Calendar",
+          "status": "Daily driver"
+        },
+        "screens": [
+          {
+            "src": "/projects/schedule-1.png",
+            "alt": "Smart Scheduler — brain dump"
+          },
+          {
+            "src": "/projects/schedule-2.png",
+            "alt": "Smart Scheduler — AI preview"
+          },
+          {
+            "src": "/projects/schedule-3.png",
+            "alt": "Smart Scheduler — schedule view"
+          },
+          {
+            "src": "/projects/schedule-4.png",
+            "alt": "Smart Scheduler — energy map"
+          },
+          {
+            "src": "/projects/schedule-5.png",
+            "alt": "Smart Scheduler — settings"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Overview",
+            "paragraphs": [
+              "Most scheduling tools treat time as a dumb container — here's a slot, shove a task in. Smart Scheduler treats time like the scarce, opinionated resource it actually is: you don't do deep work at 9pm, you don't take meetings before coffee, and Tuesdays feel different from Thursdays.",
+              "You brain-dump your todos in a natural shorthand — durations, categories and priority flags become inline chips as you type — and the app reads your Google Calendar plus a personal energy map of your day. Gemini proposes a full plan that fits the new tasks into the gaps: focus work in your peaks, admin in your dips, meals at meal times. Review, drag-to-refine, hit Add to Calendar."
+            ]
+          },
+          {
+            "heading": "What I built",
+            "list": [
+              "Chip-composer brain dump that parses task name, duration, category and priority live as you type — one input field, no extra UI",
+              "Editable energy map (peak / steady / dip windows) that feeds the AI prompt so plans actually match your rhythm",
+              "Three views of today's calendar — list, timeline, hybrid",
+              "Multi-calendar support",
+              "Installable PWA shell"
+            ]
+          },
+          {
+            "heading": "How the AI piece works",
+            "paragraphs": [
+              "The model gets the current time, today's locked events, the user's energy windows tagged PEAK / STEADY / DIP, and the todos left to place. The prompt enforces a handful of rules: never schedule in the past, leave ten minutes between blocks, match category to time of day, never overlap a locked event, and drop anything that genuinely won't fit today.",
+              "The reply has to be strict JSON. A balanced-brace extractor pulls it out even if Gemini wraps it in prose or fences, then every item is validated server-side — unknown categories coerced, priorities boolean-checked, times sanity-checked. If the first response doesn't parse, the pipeline retries once with a schema-correction hint before surfacing an error to the UI."
+            ]
+          },
+          {
+            "heading": "Stack",
+            "stackLine": "Next.js 15 · React · Google Gemini · Google Calendar API · MongoDB · @dnd-kit · PWA"
+          }
+        ]
+      }
+    },
+    "chat-lecs": {
+      "name": "Chat-LECS",
+      "navTitle": "Chat-LECS",
+      "card": {
+        "size": "narrow",
+        "description": "Elliptic-curve signed messaging on Firebase real-time DB.",
+        "tags": ["Firebase", "Cryptography", "LEC Signaturing"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/LECS-chat"
+      },
+      "page": {
+        "title": ["Chat-LECS.", "Messages that sign themselves."],
+        "subtitle": "A chat app where every message carries a Linear Elliptic Curve Signature — so recipients can mathematically verify the sender, not just trust a username. Firebase underneath, real-time everywhere.",
+        "meta": {
+          "year": "2023",
+          "role": "Solo build",
+          "stack": " LEC Signaturing · Firebase · ECC",
+          "status": "Research"
+        },
+        "screens": [
+          { "src": "/projects/chat-lecs-1.jpg", "alt": "Project screenshot" }
+        ],
+        "sections": [
+          {
+            "heading": "Overview",
+            "paragraphs": [
+              "Chat apps ask you to trust the server. Chat-LECS asks you to trust the math. Every outbound message is signed with the sender's private key using elliptic-curve cryptography; every received message is verified client-side before it's rendered.",
+              "Firebase handles the real-time transport and auth. The signing layer is the interesting bit — it's what turns \"probably from you\" into \"provably from you.\""
+            ]
+          },
+          {
+            "heading": "Details",
+            "list": [
+              "ECC key pairs generated and stored client-side at registration",
+              "Each message signed before upload, verified on download",
+              "Firebase real-time DB for transport, Firebase Auth for identity",
+              "Visual indicator per-message for verification state",
+              "Multi device support"
+            ]
+          }
+        ]
+      }
+    },
+    "sort-alyzer": {
+      "name": "Sort-Alyzer",
+      "navTitle": "Sort-Alyzer",
+      "card": {
+        "size": "wide",
+        "description": "Benchmarks sorting algorithms across single and multi-threaded runs. Built in C++ with OpenMP.",
+        "tags": ["C++", "OpenMP", "Algorithms"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/Compare-sortingAlgorithms"
+      },
+      "page": {
+        "title": ["Sort-Alyzer.", "Big-O is a lie until you measure."],
+        "subtitle": "A C++ tool that runs every classic sorting algorithm against the same inputs — single-threaded, and multi-threaded with OpenMP. The results never match the textbook. That's the whole point.",
+        "meta": {
+          "year": "2023",
+          "role": "Solo build",
+          "stack": "C++ · OpenMP",
+          "status": "Coursework"
+        },
+        "sections": [
+          {
+            "heading": "Overview",
+            "paragraphs": [
+              "Textbook complexity hides a lot — cache misses, branch prediction, memory allocator warmup, the fact that your laptop throttles when it gets warm. Sort-Alyzer just runs the sorts and measures what actually happens.",
+              "I wrote clean implementations of quick, merge, heap, radix, bubble, insertion and shell sort, then wrapped them in an OpenMP harness that can parallelize the divide-step where it makes sense. The output is a little less like a CS exam and more like truth."
+            ]
+          },
+          {
+            "heading": "Details",
+            "list": [
+              "7 sorting algorithms, hand-written in modern C++",
+              "OpenMP parallelization for divide-and-conquer sorts",
+              "Micro-benchmark harness with warmup + statistical runs",
+              "Exports to CSV for offline plotting"
+            ]
+          }
+        ]
+      }
+    },
+    "soundscrapper": {
+      "name": "SoundScrapper",
+      "navTitle": "SoundScrapper",
+      "card": {
+        "description": "Rips a Spotify playlist to MP3 via YouTube. Reserach Purpose only. Does not endorse copyright infringement.",
+        "tags": ["React", "Spotify API", "YT-DLP"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/soundscraper"
+      },
+      "page": {
+        "title": ["SoundScrapper.", "Playlist in, MP3s out."],
+        "subtitle": "Point it at a Spotify playlist. It reads the tracklist, finds each song on YouTube, and hands you a folder of MP3s. Built for the times streaming won't do. Built for only educational purpose and does not motivates unautorized access to copyrighted music.",
+        "meta": {
+          "year": "2023",
+          "role": "Solo build",
+          "stack": "React · Spotify · YT",
+          "status": "Personal tool"
+        },
+        "screens": [
+          {
+            "src": "/projects/sound-scraper-1.png",
+            "alt": "Project screenshot"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Overview",
+            "paragraphs": [
+              "Built this for long flights, bad data, and the particular joy of owning an MP3. Drop in a playlist URL; Spotify's API gives us the tracklist; YouTube handles matching and audio; YTDL-Core pulls the audio down; it lands as tagged MP3s in a folder. Doesn't endorse copyright infringement."
+            ]
+          },
+          {
+            "heading": "Details",
+            "list": [
+              "Spotify API for playlist + track metadata",
+              "YouTube search for best-match source video",
+              "YTDL-Core to extract audio streams",
+              "Progress UI written in React, queues + retries"
+            ]
+          }
+        ]
+      }
+    },
+    "shootit": {
+      "name": "ShootIt++",
+      "navTitle": "ShootIt++",
+      "card": {
+        "description": "A space shooter built in C++ with SFML. Expanding window mechanic, custom art.",
+        "tags": ["C++", "SFML"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/shootIt--"
+      },
+      "page": {
+        "title": ["ShootIt++.", "A space shooter that grows on you."],
+        "subtitle": "Old-school arcade shooter written in C++ with SFML. Custom graphics, custom sound, and a mechanic that nobody asked for: shoot enough asteroids and the game window literally expands.",
+        "meta": {
+          "year": "2022",
+          "role": "Solo build",
+          "stack": "C++ · SFML",
+          "status": "Playable"
+        },
+        "screens": [
+          { "src": "/projects/shootit-1.png", "alt": "Project screenshot" }
+        ],
+        "sections": [
+          {
+            "heading": "Overview",
+            "paragraphs": [
+              "Wrote this the year I discovered C++ graphics could be fun. SFML handles the window, input, and sprite rendering; I wrote the physics, the collision, the sound cues, the asteroid spawner and the UI.",
+              "The expanding-window thing was a whim that became the best part of the game. Hit enough asteroids and the playable area literally grows — which means new asteroids spawn in new places, which means the game gets harder in a way you can see."
+            ]
+          },
+          {
+            "heading": "Details",
+            "list": [
+              "Custom sprite art made frame-by-frame",
+              "Physics + collision in plain C++ — no engine",
+              "Progressive difficulty via the window-growth mechanic",
+              "Ambient sound and projectile SFX mixed in"
+            ]
+          }
+        ]
+      }
+    },
+    "animephile": {
+      "name": "Animephile",
+      "card": {
+        "description": "Anime tracker with email reminders for new episodes.",
+        "tags": ["Next.js", "Firebase Auth"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/Animephile"
+      }
+    },
+    "genre-predictor": {
+      "name": "Genre Predictor",
+      "card": {
+        "description": "Classifies movie genre from script summaries. SVM trained on plots.",
+        "tags": ["Python", "SVM"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1/GenrePredictor"
+      }
+    },
+    "sleep-state": {
+      "name": "Sleep State Analysis",
+      "card": {
+        "description": "Gradient-boosted classifier detects sleep onset from limb motion.",
+        "tags": ["Python", "GBM"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1"
+      }
+    },
+    "job-portal": {
+      "name": "Job Portal",
+      "card": {
+        "description": "MERN job board with recruiter dashboards. Team of four.",
+        "tags": ["MERN", "MongoDB"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1"
+      }
+    },
+    "git-kitty": {
+      "name": "Git Kitty",
+      "card": {
+        "description": "Chrome extension that reacts with moods to your commit streak.",
+        "tags": ["Extension", "GitHub API"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1"
+      }
+    },
+    "traffic-light": {
+      "name": "Dynamic Traffic Light",
+      "card": {
+        "description": "IoT + Arduino system that adapts light timing to live traffic.",
+        "tags": ["IoT", "Arduino"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1"
+      }
+    },
+    "cordova-weather": {
+      "name": "Cordova Weather",
+      "card": {
+        "description": "Android weather app with dashboard and to-do list.",
+        "tags": ["Cordova", "OpenWeather"]
+      },
+      "links": {
+        "github": "https://github.com/IORD1"
+      }
+    }
+  }
+}
