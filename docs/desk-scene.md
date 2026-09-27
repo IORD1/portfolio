@@ -246,7 +246,8 @@ hard-code it:
 
 Flower x/y are the flower's centre measured from the logo box's top-right corner.
 Frames: `public/desk/flower/<set>/step-NN.webp` (closed bud → full bloom, WebP with alpha, made
-with Pillow from the PNGs in `~/Downloads/flowers/<set>/transparent`). Sets and frame counts are
+with Pillow from the PNGs in `~/Downloads/flowers/<set>/transparent`; if a set's PNGs have different
+canvas sizes per step, pad them to one square canvas first so the bud stays smaller than the bloom). Sets and frame counts are
 listed in `FLOWERS` (`app/loader-config.ts`); adding a set means a new entry there, a new
 `--flower<n>-*` block on `:root`, a `.loader-flower-<n>` rule, and a `flowerGroup(n, ...)` in the tuner.
 All flowers run on one clock; `flower.gap` is how many frames after one flower's bud the next flower's

@@ -19,13 +19,14 @@ export const FLOWERS = [
   { id: 'teal', frames: 9 }, // public/desk/flower/teal/step-01..09.webp: closed bud -> full bloom
   { id: 'lotus', frames: 8 }, // public/desk/flower/lotus/step-01..08.webp
   { id: 'sunflower', frames: 8 }, // public/desk/flower/sunflower/step-01..08.webp (no transparent full-bloom frame yet)
+  { id: 'lily', frames: 8 }, // public/desk/flower/lily/step-01..08.webp (frames padded to one canvas; no transparent full-bloom frame yet)
 ];
 
 export const FLOWER = {
   step: 170, // ms per frame
-  hold: 700, // ms after the last flower blooms before the cycle continues (also on the buds in pingpong)
+  hold: 250, // ms after the last flower blooms before the cycle continues (also on the buds in pingpong)
   mode: 'chain' as 'chain' | 'loop' | 'pingpong' | 'once',
-  gap: 5, // frames between one flower's bud and the next flower's bud (0 = bloom together)
+  gap: 7, // frames between one flower's bud and the next flower's bud (0 = bloom together)
   /** Restart from the buds (set by the component while mounted). */
   restart: undefined as undefined | (() => void),
 };

@@ -1927,6 +1927,13 @@ body::-webkit-scrollbar {
   --flower3-opacity: 1;
   --flower3-shadow: 0.15;
   --flower3-z: 9;
+  --flower4-size: 114px;
+  --flower4-x: 145px;
+  --flower4-y: 127px;
+  --flower4-rot: 0deg;
+  --flower4-opacity: 1;
+  --flower4-shadow: 0.15;
+  --flower4-z: 9;
 }
 :root[data-theme="light"] { --loader-base: #b9b9b9; --loader-shine: #000000; }
 
@@ -1956,6 +1963,10 @@ body::-webkit-scrollbar {
 .loader-flower-3 {
   --fs: var(--flower3-size); --fx: var(--flower3-x); --fy: var(--flower3-y); --fr: var(--flower3-rot);
   --fo: var(--flower3-opacity); --fsh: var(--flower3-shadow); --fz: var(--flower3-z);
+}
+.loader-flower-4 {
+  --fs: var(--flower4-size); --fx: var(--flower4-x); --fy: var(--flower4-y); --fr: var(--flower4-rot);
+  --fo: var(--flower4-opacity); --fsh: var(--flower4-shadow); --fz: var(--flower4-z);
 }
 .loader-logo { z-index: 0; }
 .loader-flower img {

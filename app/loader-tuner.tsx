@@ -43,6 +43,7 @@ const GROUPS: Group[] = [
   flowerGroup(1, FLOWERS[0].id, { size: 186, x: -443, y: 285, rot: 0, opacity: 1, shadow: 0.15, z: 0 }),
   flowerGroup(2, FLOWERS[1].id, { size: 170, x: -299, y: 99, rot: 0, opacity: 1, shadow: 0.15, z: 9 }),
   flowerGroup(3, FLOWERS[2].id, { size: 404, x: 310, y: -91, rot: 0, opacity: 1, shadow: 0.15, z: 9 }),
+  flowerGroup(4, FLOWERS[3].id, { size: 114, x: 145, y: 127, rot: 0, opacity: 1, shadow: 0.15, z: 9 }),
   {
     title: 'Bloom',
     ctls: [
