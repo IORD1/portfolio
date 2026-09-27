@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { selectedWork, sideQuests, type Project } from './projects/projects-data';
 import { mainVisuals, miniVisuals, cardAnimClass } from './projects/visuals';
 import ThemeToggle from './theme-toggle';
+import LoadingScreenButton, { DeskLoadingGate } from './loading-screen';
 import DeskPlant from './desk-plant-three';
 import DeskLamp from './desk-lamp-three';
 import DeskTuner from './desk-tuner';
@@ -172,6 +173,8 @@ export default function Home() {
   return (
     <>
 
+      {/* Covers the page until the desk assets (mat, 3D plant, 3D lamp) have rendered */}
+      <DeskLoadingGate />
       {/* NAV + HERO: together fill the first viewport */}
       <div className="fold">
       <nav className="nav">
@@ -186,6 +189,7 @@ export default function Home() {
           <a href="#journey">Quest log</a>
         </div>
         <div className="nav-cta">
+          <LoadingScreenButton />
           <ThemeToggle />
           <a href="/Prathmesh_Ingole_Resume.pdf" className="btn btn-ghost" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

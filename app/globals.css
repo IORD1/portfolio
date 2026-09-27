@@ -1787,3 +1787,163 @@ body::-webkit-scrollbar {
 .scrollbar-thumb.is-dragging {
   cursor: grabbing;
 }
+
+/* ====== Loading screen (app/loading-screen.tsx) ======
+   Full-screen overlay in the page theme. The name logo is drawn as a CSS mask so the
+   same SVG works in light and dark: a base fill in --fg plus a bright band that sweeps
+   across the letterforms ("shine"). Shown on demand from the nav for now. */
+.loader-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-2);
+  color: var(--fg-dim);
+  transition: color 200ms var(--ease), border-color 200ms var(--ease), background 200ms var(--ease);
+}
+.loader-trigger:hover { color: var(--fg); border-color: var(--line-3); background: var(--line); }
+.loader-trigger svg { width: 15px; height: 15px; display: block; }
+
+.loader {
+  --loader-w: clamp(200px, 32vw, 420px);
+  position: fixed;
+  inset: 0;
+  z-index: 1100; /* above the custom scrollbar (1000) */
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--fg);
+  animation: loader-in 360ms var(--ease) both;
+}
+.loader[data-dismissible] {
+  cursor: pointer;
+}
+.loader[data-closing] {
+  animation: loader-out 460ms var(--ease) both;
+  pointer-events: none;
+}
+@keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes loader-out { from { opacity: 1; } to { opacity: 0; } }
+
+/* Soft vignette so the centre feels lit */
+.loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 48%, var(--bg-2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.loader-inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 28px;
+  animation: loader-rise 700ms var(--ease) both;
+}
+@keyframes loader-rise {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.loader-logo-wrap {
+  position: relative;
+  width: var(--loader-w);
+  /* name-logo.svg is 772 x 421 */
+  aspect-ratio: 772 / 421;
+}
+
+/* Logo through a mask: base tone + a sweeping highlight band */
+.loader-logo,
+.loader-logo-glow {
+  position: absolute;
+  inset: 0;
+  -webkit-mask: url('/name-logo.svg') center / contain no-repeat;
+  mask: url('/name-logo.svg') center / contain no-repeat;
+}
+.loader-logo {
+  /* Gradient is 3x the logo width; the bright band sits in its middle third and
+     background-position 100% -> 0% drags it across the letters left to right, then rests. */
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 40%,
+      color-mix(in srgb, var(--loader-shine) 55%, transparent) 46%,
+      var(--loader-shine) 50%,
+      color-mix(in srgb, var(--loader-shine) 55%, transparent) 54%,
+      transparent 60%,
+      transparent 100%
+    ) 100% 0 / 300% 100% no-repeat,
+    var(--loader-base);
+  animation: loader-shine 2.4s cubic-bezier(0.4, 0, 0.3, 1) infinite;
+}
+@keyframes loader-shine {
+  0% { background-position: 100% 0, 0 0; }
+  75%, 100% { background-position: 0% 0, 0 0; }
+}
+
+/* Blurred copy behind the logo: a faint halo that breathes */
+.loader-logo-glow {
+  background: var(--loader-shine);
+  filter: blur(14px);
+  opacity: 0.22;
+  animation: loader-breathe 2.2s ease-in-out infinite;
+}
+@keyframes loader-breathe {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.32; }
+}
+
+:root { --loader-base: #5e5e5e; --loader-shine: #ffffff; }
+:root[data-theme="light"] { --loader-base: #b9b9b9; --loader-shine: #000000; }
+
+/* Hairline progress bar: indeterminate sweep */
+.loader-bar {
+  position: relative;
+  width: min(220px, 60vw);
+  height: 2px;
+  border-radius: 2px;
+  background: var(--line-2);
+  overflow: hidden;
+}
+.loader-bar span {
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: inherit;
+  background: var(--fg);
+  animation: loader-bar 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes loader-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+.loader-caption {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.loader-hint {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+  animation: loader-in 800ms 1200ms var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-logo { animation: none; background: var(--fg); }
+  .loader-logo-glow, .loader-bar span { animation: none; }
+  .loader-inner { animation: none; }
+}
