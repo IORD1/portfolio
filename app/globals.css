@@ -1824,6 +1824,11 @@ body::-webkit-scrollbar {
   animation: loader-out 460ms var(--ease) both;
   pointer-events: none;
 }
+/* Page-load gate: the backdrop must cover the desk from the very first paint, so no fade-in
+   (the fade-in stays for the nav preview). The inner content still rises in. */
+.loader[data-instant]:not([data-closing]) {
+  animation: none;
+}
 @keyframes loader-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes loader-out { from { opacity: 1; } to { opacity: 0; } }
 

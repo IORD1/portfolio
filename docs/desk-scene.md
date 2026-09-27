@@ -254,3 +254,9 @@ All flowers run on one clock; `flower.gap` is how many frames after one flower's
 bud appears (0 = together; 1 = flower 2 shows its bud while flower 1 shows frame 2).
 `flower.mode`: `chain` (default) restarts flower 1 from its bud `hold` ms after the last flower reaches full
 bloom, with the others following at `gap`; `loop` resets all flowers to buds together; `pingpong`; `once`.
+The page-load gate reveals the page only when the assets are in *and* flower `FLOWER.gateFlower` (1-based,
+default 3) is on its full-bloom frame (`FLOWER.bloomed`, `loader:bloom` event on `document`), so the reveal
+never cuts the relay mid-bud; if that flower is already in bloom when the assets arrive it reveals at once,
+otherwise on its next bloom. It gives up after 8 s of waiting for the bloom (15 s overall).
+The gate's overlay has `data-instant`, which drops the 360 ms `loader-in` fade so the desk never shows
+through on first paint (the nav preview keeps the fade).

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import LoaderTuner from './loader-tuner';
-import { FLOWER, FLOWERS } from './loader-config';
+import { BLOOM_EVENT, FLOWER, FLOWERS } from './loader-config';
 
 /**
  * Full-screen loading overlay: the name logo with a light sweep ("shine") over
@@ -12,7 +12,9 @@ import { FLOWER, FLOWERS } from './loader-config';
  *
  * Two ways in:
  *  - `DeskLoadingGate` shows it on page load until the desk assets (cutting mat,
- *    3D plant, 3D lamp) have rendered their first frame.
+ *    3D plant, 3D lamp) have rendered their first frame, and then until flower
+ *    `FLOWER.gateFlower` (the third) is at full bloom, so the relay is never cut off mid-bud.
+ *    Its overlay is opaque from the very first paint (no fade-in), so the desk never shows through.
  *  - `LoadingScreenButton` (nav) opens it on demand for previewing.
  *
  * Dev tuning: open the page with `?tune=1` (dev builds only) for a "Loader tuner"
@@ -44,12 +46,20 @@ function LoaderFlowers() {
     // chain: each flower repeats with this period, so flower 1 buds again `hold` after the last bloom
     const periodOf = (f: typeof FLOWER) => Math.max(1, lastTick() + Math.max(0, Math.round(f.hold / f.step)));
     const draw = (chain: boolean) => {
+      const f = window.__flower ?? FLOWER;
+      const gateAt = Math.min(Math.max(1, Math.round(f.gateFlower)), sets.length) - 1;
+      let bloomed = false;
       sets.forEach((imgs, k) => {
         let local = t - startOf(k); // < 0: not started yet
-        if (chain && local >= 0) local %= periodOf(window.__flower ?? FLOWER);
+        if (chain && local >= 0) local %= periodOf(f);
         local = Math.min(local, imgs.length - 1);
         imgs.forEach((im, i) => im.toggleAttribute('data-on', i === local));
+        if (k === gateAt) bloomed = local === imgs.length - 1;
       });
+      // The page-load gate waits for this before revealing the page.
+      const was = FLOWER.bloomed;
+      FLOWER.bloomed = bloomed;
+      if (bloomed && !was) document.dispatchEvent(new Event(BLOOM_EVENT));
     };
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -95,6 +105,7 @@ function LoaderFlowers() {
     return () => {
       clearTimeout(timer);
       FLOWER.restart = undefined;
+      FLOWER.bloomed = false;
     };
   }, []);
 
@@ -118,11 +129,14 @@ export function LoadingScreen({
   open,
   onClose,
   dismissible = false,
+  instant = false,
 }: {
   open: boolean;
   onClose?: () => void;
   /** Click anywhere / Esc closes it and a hint says so (preview mode). */
   dismissible?: boolean;
+  /** Opaque from the first frame instead of fading in (page-load gate). */
+  instant?: boolean;
 }) {
   // Stays mounted for the fade-out after `open` flips false; "closing" is derived from that.
   const [mounted, setMounted] = useState(open);
@@ -158,6 +172,7 @@ export function LoadingScreen({
       className="loader"
       data-closing={closing || undefined}
       data-dismissible={dismissible || undefined}
+      data-instant={instant || undefined}
       role="status"
       aria-live="polite"
       aria-label="Loading"
@@ -189,6 +204,8 @@ const GL_SEL = '.desk .desk-plant, .desk .desk-lamp';
 const MIN_SHOW_MS = 700;
 /** Give up waiting after this long (no WebGL, blocked asset, ...) and reveal the page. */
 const MAX_WAIT_MS = 15000;
+/** Once the assets are in, give up waiting for the gate flower's bloom after this long. */
+const MAX_BLOOM_WAIT_MS = 8000;
 
 function deskAssetsReady(): boolean {
   const mat = document.querySelector<HTMLImageElement>(MAT_SEL);
@@ -199,8 +216,10 @@ function deskAssetsReady(): boolean {
 }
 
 /**
- * Renders the loading screen from the first (server) paint and hides it once the
- * desk's assets are in. Place it once, anywhere on the homepage.
+ * Renders the loading screen from the first (server) paint, opaque straight away, and hides
+ * it once the desk's assets are in and flower `FLOWER.gateFlower` is at full bloom (so the
+ * reveal lands on a bloom, never mid-relay). If the assets take longer, the relay keeps
+ * cycling and the reveal lands on that flower's next bloom. Place it once on the homepage.
  */
 export function DeskLoadingGate() {
   const [open, setOpen] = useState(true);
@@ -212,13 +231,27 @@ export function DeskLoadingGate() {
 
     const t0 = performance.now();
     let done = false;
+    let closed = false;
     let minTimer: ReturnType<typeof setTimeout> | undefined;
+    let bloomTimer: ReturnType<typeof setTimeout> | undefined;
 
+    const reveal = () => {
+      if (closed) return;
+      closed = true;
+      document.removeEventListener(BLOOM_EVENT, reveal);
+      setOpen(false);
+    };
+    // Assets are in: wait out the minimum show time, then for the gate flower's bloom
+    // (reveal at once if it is showing its bloom frame right now).
     const finish = () => {
       if (done) return;
       done = true;
       const wait = Math.max(0, MIN_SHOW_MS - (performance.now() - t0));
-      minTimer = setTimeout(() => setOpen(false), wait);
+      minTimer = setTimeout(() => {
+        if (FLOWER.bloomed || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return reveal();
+        document.addEventListener(BLOOM_EVENT, reveal);
+        bloomTimer = setTimeout(reveal, MAX_BLOOM_WAIT_MS);
+      }, wait);
     };
     const check = () => {
       if (deskAssetsReady()) finish();
@@ -234,19 +267,21 @@ export function DeskLoadingGate() {
     mat?.addEventListener('load', check);
     mat?.addEventListener('error', check);
 
-    const safety = setTimeout(finish, MAX_WAIT_MS);
+    const safety = setTimeout(reveal, MAX_WAIT_MS);
     check();
 
     return () => {
       mo.disconnect();
       mat?.removeEventListener('load', check);
       mat?.removeEventListener('error', check);
+      document.removeEventListener(BLOOM_EVENT, reveal);
       clearTimeout(safety);
       if (minTimer) clearTimeout(minTimer);
+      if (bloomTimer) clearTimeout(bloomTimer);
     };
   }, []);
 
-  return <LoadingScreen open={open} onClose={close} />;
+  return <LoadingScreen open={open} onClose={close} instant />;
 }
 
 /* ---------- Nav preview button ---------- */

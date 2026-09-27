@@ -27,9 +27,16 @@ export const FLOWER = {
   hold: 250, // ms after the last flower blooms before the cycle continues (also on the buds in pingpong)
   mode: 'chain' as 'chain' | 'loop' | 'pingpong' | 'once',
   gap: 7, // frames between one flower's bud and the next flower's bud (0 = bloom together)
+  /** 1-based index of the flower whose full bloom the page-load gate waits for (clamped to the set count). */
+  gateFlower: 3,
   /** Restart from the buds (set by the component while mounted). */
   restart: undefined as undefined | (() => void),
+  /** True while flower `gateFlower` is showing its full-bloom frame (kept up to date by the component). */
+  bloomed: false,
 };
+
+/** Fired on `document` each time flower `gateFlower` reaches its full-bloom frame. */
+export const BLOOM_EVENT = 'loader:bloom';
 
 declare global {
   interface Window {

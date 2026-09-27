@@ -35,7 +35,9 @@ Full notes, tunables and pitfalls: `docs/desk-scene.md`.
 `app/loading-screen.tsx`: full-screen overlay (theme-aware) with the shining name logo and a
 paper flowers blooming frame by frame, one after another (`public/desk/flower/<set>/step-NN.webp`,
 sets listed in `FLOWERS` in `app/loader-config.ts`). `DeskLoadingGate`
-shows it until the mat, plant and lamp have rendered; the nav ◌ button previews it.
+shows it (opaque from the first paint, no fade-in) until the mat, plant and lamp have rendered and
+flower `FLOWER.gateFlower` (3) is at full bloom;
+the nav ◌ button previews it.
 Dev tuner for it (flower size/position/timing, logo scale, shine): `app/loader-tuner.tsx`, same
 `?tune=1` opt-in, panel bottom-left. Hard-code pasted configs into `--flower<n>-*` / `--loader-*`
 on `:root` in `app/globals.css` and `FLOWER` in `app/loader-config.ts` (see `docs/desk-scene.md`).
