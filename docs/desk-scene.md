@@ -231,3 +231,25 @@ and then polls for `data-loaded` on both `.desk-plant` and `.desk-lamp` (never
 animation clocks clamp `dt` to 0.1 s, so timed captures are approximate.
 Crop with PIL to inspect details; a pixel diff of `OUT` vs `OUT2` over the plant region
 proves motion. Before/after comparisons are the way to evaluate any change here.
+
+## Loading screen tuner (`app/loader-tuner.tsx`)
+With `?tune=1` (dev only) the loading screen stays open and a "Loader tuner" panel sits
+bottom-left (the desk tuner is bottom-right). "Dismiss" closes the loader; the nav ◌ button
+re-opens it. Changes live in `localStorage["loader-tune"]`. "Copy config" JSON → where to
+hard-code it:
+
+| JSON key | Hard-code in |
+| --- | --- |
+| `css.flower<n>-size/x/y/rot/opacity/shadow/z` | `--flower<n>-*` on `:root`, `app/globals.css` ("Loading screen") |
+| `css.loader-scale`, `css.loader-shine-dur`, `css.loader-glow` | `--loader-*` on `:root`, same block |
+| `flower.step`, `flower.hold`, `flower.gap`, `flower.mode` | `FLOWER` in `app/loader-config.ts` |
+
+Flower x/y are the flower's centre measured from the logo box's top-right corner.
+Frames: `public/desk/flower/<set>/step-NN.webp` (closed bud → full bloom, WebP with alpha, made
+with Pillow from the PNGs in `~/Downloads/flowers/<set>/transparent`). Sets and frame counts are
+listed in `FLOWERS` (`app/loader-config.ts`); adding a set means a new entry there, a new
+`--flower<n>-*` block on `:root`, a `.loader-flower-<n>` rule, and a `flowerGroup(n, ...)` in the tuner.
+All flowers run on one clock; `flower.gap` is how many frames after one flower's bud the next flower's
+bud appears (0 = together; 1 = flower 2 shows its bud while flower 1 shows frame 2).
+`flower.mode`: `chain` (default) restarts flower 1 from its bud `hold` ms after the last flower reaches full
+bloom, with the others following at `gap`; `loop` resets all flowers to buds together; `pingpong`; `once`.

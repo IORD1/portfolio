@@ -1,17 +1,119 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import LoaderTuner from './loader-tuner';
+import { FLOWER, FLOWERS } from './loader-config';
 
 /**
  * Full-screen loading overlay: the name logo with a light sweep ("shine") over
- * the letterforms, a hairline progress bar and a caption. Follows the page theme
+ * the letterforms, paper flowers blooming frame by frame one after another around
+ * the logo's top-right corner, a hairline progress bar and a caption. Follows the page theme
  * (light/dark) via the CSS tokens in globals.css (`.loader*`).
  *
  * Two ways in:
  *  - `DeskLoadingGate` shows it on page load until the desk assets (cutting mat,
  *    3D plant, 3D lamp) have rendered their first frame.
  *  - `LoadingScreenButton` (nav) opens it on demand for previewing.
+ *
+ * Dev tuning: open the page with `?tune=1` (dev builds only) for a "Loader tuner"
+ * panel (app/loader-tuner.tsx) with sliders for the flower and logo. In that mode the
+ * gate stays open until the panel's "Dismiss" button.
  */
+
+/* ---------- Flower bloom (frame animation) ---------- */
+
+const frameSrc = (id: string, k: number) => `/desk/flower/${id}/step-${String(k + 1).padStart(2, '0')}.webp`;
+
+/** All flowers, stepped by one shared clock (see FLOWER in loader-config.ts). */
+function LoaderFlowers() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const host = ref.current;
+    if (!host) return;
+    window.__flower = FLOWER;
+    const sets = Array.from(host.querySelectorAll<HTMLElement>('.loader-flower')).map((el) =>
+      Array.from(el.querySelectorAll('img'))
+    );
+    let t = 0;
+    let dir = 1;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const startOf = (k: number) => k * Math.max(0, Math.round((window.__flower ?? FLOWER).gap));
+    const lastTick = () => Math.max(...sets.map((imgs, k) => startOf(k) + imgs.length - 1));
+    // chain: each flower repeats with this period, so flower 1 buds again `hold` after the last bloom
+    const periodOf = (f: typeof FLOWER) => Math.max(1, lastTick() + Math.max(0, Math.round(f.hold / f.step)));
+    const draw = (chain: boolean) => {
+      sets.forEach((imgs, k) => {
+        let local = t - startOf(k); // < 0: not started yet
+        if (chain && local >= 0) local %= periodOf(window.__flower ?? FLOWER);
+        local = Math.min(local, imgs.length - 1);
+        imgs.forEach((im, i) => im.toggleAttribute('data-on', i === local));
+      });
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      t = lastTick();
+      draw(false);
+      return;
+    }
+
+    const tick = () => {
+      const f = window.__flower ?? FLOWER;
+      const end = lastTick();
+      let wait = f.step;
+      if (f.mode === 'chain') {
+        draw(true);
+        t++;
+      } else {
+        t = Math.min(t, end);
+        draw(false);
+        if (f.mode === 'once') {
+          if (t === end) return;
+          t++;
+        } else if (f.mode === 'pingpong') {
+          if (t === end) dir = -1;
+          else if (t === 0) dir = 1;
+          if (t === end || t === 0) wait = f.hold;
+          t += dir;
+        } else {
+          if (t === end) {
+            wait = f.hold;
+            t = 0;
+          } else t++;
+        }
+      }
+      timer = setTimeout(tick, wait);
+    };
+    FLOWER.restart = () => {
+      clearTimeout(timer);
+      t = 0;
+      dir = 1;
+      tick();
+    };
+    tick();
+    return () => {
+      clearTimeout(timer);
+      FLOWER.restart = undefined;
+    };
+  }, []);
+
+  return (
+    <div className="loader-flowers" ref={ref} aria-hidden="true">
+      {FLOWERS.map((fl, k) => (
+        <div key={fl.id} className={`loader-flower loader-flower-${k + 1}`}>
+          {Array.from({ length: fl.frames }, (_, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={i} src={frameSrc(fl.id, i)} alt="" draggable={false} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- Overlay ---------- */
+
 export function LoadingScreen({
   open,
   onClose,
@@ -22,20 +124,17 @@ export function LoadingScreen({
   /** Click anywhere / Esc closes it and a hint says so (preview mode). */
   dismissible?: boolean;
 }) {
-  const [closing, setClosing] = useState(false);
+  // Stays mounted for the fade-out after `open` flips false; "closing" is derived from that.
   const [mounted, setMounted] = useState(open);
+  const [tune, setTune] = useState(false);
+  if (open && !mounted) setMounted(true);
+  const closing = mounted && !open;
 
   useEffect(() => {
-    if (open) {
-      setMounted(true);
-      setClosing(false);
-      return;
-    }
-    if (!mounted) return;
-    setClosing(true);
+    if (!closing) return;
     const t = setTimeout(() => setMounted(false), 480);
     return () => clearTimeout(t);
-  }, [open, mounted]);
+  }, [closing]);
 
   useEffect(() => {
     if (!open || !dismissible || !onClose) return;
@@ -45,6 +144,12 @@ export function LoadingScreen({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open, dismissible, onClose]);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development' || !new URLSearchParams(location.search).has('tune')) return;
+    const t = setTimeout(() => setTune(true), 0);
+    return () => clearTimeout(t);
+  }, []);
 
   if (!mounted) return null;
 
@@ -62,11 +167,13 @@ export function LoadingScreen({
         <div className="loader-logo-wrap">
           <div className="loader-logo-glow" aria-hidden="true" />
           <div className="loader-logo" aria-hidden="true" />
+          <LoaderFlowers />
         </div>
         <div className="loader-bar" aria-hidden="true"><span /></div>
         <div className="loader-caption">Setting up the desk</div>
       </div>
       {dismissible && <div className="loader-hint">click anywhere or press Esc to dismiss</div>}
+      {tune && <LoaderTuner onDismiss={onClose} />}
     </div>
   );
 }
@@ -97,8 +204,12 @@ function deskAssetsReady(): boolean {
  */
 export function DeskLoadingGate() {
   const [open, setOpen] = useState(true);
+  const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
+    // Tuning mode: stay open so the loader can be styled; the panel's "Dismiss" closes it.
+    if (process.env.NODE_ENV === 'development' && new URLSearchParams(location.search).has('tune')) return;
+
     const t0 = performance.now();
     let done = false;
     let minTimer: ReturnType<typeof setTimeout> | undefined;
@@ -135,7 +246,7 @@ export function DeskLoadingGate() {
     };
   }, []);
 
-  return <LoadingScreen open={open} />;
+  return <LoadingScreen open={open} onClose={close} />;
 }
 
 /* ---------- Nav preview button ---------- */

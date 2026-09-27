@@ -1807,7 +1807,7 @@ body::-webkit-scrollbar {
 .loader-trigger svg { width: 15px; height: 15px; display: block; }
 
 .loader {
-  --loader-w: clamp(200px, 32vw, 420px);
+  --loader-w: calc(clamp(90px, 14.4vw, 189px) * var(--loader-scale)); /* = 0.45 x the original clamp(200px, 32vw, 420px) */
   position: fixed;
   inset: 0;
   z-index: 1100; /* above the custom scrollbar (1000) */
@@ -1878,7 +1878,7 @@ body::-webkit-scrollbar {
       transparent 100%
     ) 100% 0 / 300% 100% no-repeat,
     var(--loader-base);
-  animation: loader-shine 2.4s cubic-bezier(0.4, 0, 0.3, 1) infinite;
+  animation: loader-shine var(--loader-shine-dur) cubic-bezier(0.4, 0, 0.3, 1) infinite;
 }
 @keyframes loader-shine {
   0% { background-position: 100% 0, 0 0; }
@@ -1893,12 +1893,80 @@ body::-webkit-scrollbar {
   animation: loader-breathe 2.2s ease-in-out infinite;
 }
 @keyframes loader-breathe {
-  0%, 100% { opacity: 0.12; }
-  50% { opacity: 0.32; }
+  0%, 100% { opacity: calc(0.12 * var(--loader-glow)); }
+  50% { opacity: calc(0.32 * var(--loader-glow)); }
 }
 
-:root { --loader-base: #5e5e5e; --loader-shine: #ffffff; }
+:root {
+  --loader-base: #5e5e5e;
+  --loader-shine: #ffffff;
+  /* Tunables (Loader tuner, app/loader-tuner.tsx, ?tune=1 in dev). Hard-code "Copy config" values here. */
+  --loader-scale: 0.45;       /* multiplies the logo width (on top of the 0.45 already folded into --loader-w) */
+  --loader-shine-dur: 3.8s;   /* one sweep of the light band */
+  --loader-glow: 0.28;        /* halo strength behind the logo */
+  /* Flower 1 (teal), 2 (pink lotus), 3 (sunflower). Centre offsets are from the logo box's top-right
+     corner: x + = further right, y + = lower. */
+  --flower1-size: 186px;
+  --flower1-x: -443px;
+  --flower1-y: 285px;
+  --flower1-rot: 0deg;
+  --flower1-opacity: 1;
+  --flower1-shadow: 0.15;     /* drop shadow alpha */
+  --flower1-z: 0;             /* stack order; the logo is 0 */
+  --flower2-size: 170px;
+  --flower2-x: -299px;
+  --flower2-y: 99px;
+  --flower2-rot: 0deg;
+  --flower2-opacity: 1;
+  --flower2-shadow: 0.15;
+  --flower2-z: 9;
+  --flower3-size: 404px;
+  --flower3-x: 310px;
+  --flower3-y: -91px;
+  --flower3-rot: 0deg;
+  --flower3-opacity: 1;
+  --flower3-shadow: 0.15;
+  --flower3-z: 9;
+}
 :root[data-theme="light"] { --loader-base: #b9b9b9; --loader-shine: #000000; }
+
+/* Paper flowers blooming around the logo's top-right corner (frames toggled by
+   app/loading-screen.tsx). The wrap is the logo box, so x/y offsets are from its
+   top-right corner. Per-flower values come from --flower<n>-* via the local --f* vars. */
+.loader-flower {
+  position: absolute;
+  left: calc(100% + var(--fx));
+  top: var(--fy);
+  width: var(--fs);
+  height: var(--fs);
+  transform: translate(-50%, -50%) rotate(var(--fr));
+  opacity: var(--fo);
+  filter: drop-shadow(0 6px 12px rgb(0 0 0 / var(--fsh)));
+  z-index: var(--fz);
+  pointer-events: none;
+}
+.loader-flower-1 {
+  --fs: var(--flower1-size); --fx: var(--flower1-x); --fy: var(--flower1-y); --fr: var(--flower1-rot);
+  --fo: var(--flower1-opacity); --fsh: var(--flower1-shadow); --fz: var(--flower1-z);
+}
+.loader-flower-2 {
+  --fs: var(--flower2-size); --fx: var(--flower2-x); --fy: var(--flower2-y); --fr: var(--flower2-rot);
+  --fo: var(--flower2-opacity); --fsh: var(--flower2-shadow); --fz: var(--flower2-z);
+}
+.loader-flower-3 {
+  --fs: var(--flower3-size); --fx: var(--flower3-x); --fy: var(--flower3-y); --fr: var(--flower3-rot);
+  --fo: var(--flower3-opacity); --fsh: var(--flower3-shadow); --fz: var(--flower3-z);
+}
+.loader-logo { z-index: 0; }
+.loader-flower img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  user-select: none;
+}
+.loader-flower img[data-on] { opacity: 1; }
 
 /* Hairline progress bar: indeterminate sweep */
 .loader-bar {

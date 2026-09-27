@@ -30,3 +30,12 @@ Full notes, tunables and pitfalls: `docs/desk-scene.md`.
 - New GLB assets: compress with gltf-transform (recipe in `docs/desk-scene.md`) into `public/desk/`.
 - Sunlight layers: `.desk-sun*` in `app/globals.css`. Mat wear: `.hero::before/::after`.
 - `app/desk-plant.tsx` is the old `<model-viewer>` version, kept for rollback only.
+
+## Loading screen
+`app/loading-screen.tsx`: full-screen overlay (theme-aware) with the shining name logo and a
+paper flowers blooming frame by frame, one after another (`public/desk/flower/<set>/step-NN.webp`,
+sets listed in `FLOWERS` in `app/loader-config.ts`). `DeskLoadingGate`
+shows it until the mat, plant and lamp have rendered; the nav ◌ button previews it.
+Dev tuner for it (flower size/position/timing, logo scale, shine): `app/loader-tuner.tsx`, same
+`?tune=1` opt-in, panel bottom-left. Hard-code pasted configs into `--flower<n>-*` / `--loader-*`
+on `:root` in `app/globals.css` and `FLOWER` in `app/loader-config.ts` (see `docs/desk-scene.md`).
