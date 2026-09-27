@@ -10,6 +10,7 @@ import {
   type Section,
 } from '../projects-data';
 import RevealOnScroll from './RevealOnScroll';
+import ThemeToggle from '../../theme-toggle';
 
 export function generateStaticParams() {
   return projectsWithPages().map((p) => ({ slug: p.slug }));
@@ -44,7 +45,6 @@ export default async function ProjectPage({
   return (
     <>
       <RevealOnScroll />
-      <div className="grain" aria-hidden="true"></div>
 
       <nav className="nav">
         <Link href="/" className="nav-name">
@@ -56,6 +56,7 @@ export default async function ProjectPage({
           <Link href="/#journey">Journey</Link>
         </div>
         <div className="nav-cta">
+          <ThemeToggle />
           <a href="/Prathmesh_Ingole_Resume.pdf" className="btn btn-ghost" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M12 3v12" />

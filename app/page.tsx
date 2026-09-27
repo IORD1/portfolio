@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { selectedWork, sideQuests, type Project } from './projects/projects-data';
 import { mainVisuals, miniVisuals, cardAnimClass } from './projects/visuals';
+import ThemeToggle from './theme-toggle';
+import DeskPlant from './desk-plant';
 
 function ProjectCard({ project }: { project: Project }) {
   const sizeClass = project.card.size ? ` ${project.card.size}` : '';
@@ -87,8 +89,6 @@ function MiniCard({ project }: { project: Project }) {
 }
 
 export default function Home() {
-  const lofiAudioRef = useRef<HTMLAudioElement>(null);
-  const metalAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     // Scroll reveal
@@ -119,32 +119,6 @@ export default function Home() {
       card.addEventListener('mousemove', handler);
       cardHandlers.set(card, handler);
     });
-
-    // Parallax on hero squircles + nav shrink
-    const squircles = document.querySelectorAll<HTMLElement>(
-      '.ambient .squircle'
-    );
-    const navEl = document.querySelector<HTMLElement>('.nav');
-    let ticking = false;
-    const SHRINK_AT = 80;
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const y = window.scrollY;
-          squircles.forEach((s, i) => {
-            const speed = 0.05 + i * 0.04;
-            s.style.translate = `0 ${y * speed}px`;
-          });
-          if (navEl) {
-            if (y > SHRINK_AT) navEl.classList.add('is-shrunk');
-            else navEl.classList.remove('is-shrunk');
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
 
     // Horizontal scroll buttons for Side quests
     const hs = document.getElementById('hscroll');
@@ -180,178 +154,24 @@ export default function Home() {
       });
     }
 
-    // Ambient player — user spec: show & play after 60s
-    const player = document.getElementById('player');
-    const playBtn = document.getElementById('player-play');
-    const nextBtn = document.getElementById('player-next');
-    const loopBtn = document.getElementById('player-loop');
-    const closeBtn = document.getElementById('player-close');
-    const progressBar = player?.querySelector<HTMLElement>('.player-bar') ?? null;
-    const progressFill = player?.querySelector<HTMLElement>('.player-bar-fill') ?? null;
-    const lofiAudio = lofiAudioRef.current;
-    const metalAudio = metalAudioRef.current;
-
-    const currentAudio = () =>
-      player?.classList.contains('is-metal') ? metalAudio : lofiAudio;
-    const otherAudio = () =>
-      player?.classList.contains('is-metal') ? lofiAudio : metalAudio;
-
-    let minimizeTimer: ReturnType<typeof setTimeout> | null = null;
-    let appearTimer: ReturnType<typeof setTimeout> | null = null;
-    const scheduleMinimize = (delay = 3000) => {
-      if (minimizeTimer) clearTimeout(minimizeTimer);
-      minimizeTimer = setTimeout(() => {
-        if (player && !player.matches(':hover')) {
-          player.classList.add('is-minimized');
-        }
-      }, delay);
-    };
-
-    // Browsers block audio autoplay without user interaction — if play()
-    // rejects, fall back to paused state so the play button is shown.
-    const tryPlay = (audio: HTMLAudioElement | null) => {
-      if (!audio) return;
-      audio.play().catch(() => {
-        player?.classList.add('is-paused');
-      });
-    };
-
-    // Loop is on by default; both tracks loop indefinitely. When toggled off,
-    // the `ended` handler advances to the other track instead.
-    if (lofiAudio) lofiAudio.loop = true;
-    if (metalAudio) metalAudio.loop = true;
-
-    appearTimer = setTimeout(() => {
-      if (!player) return;
-      player.classList.add('is-visible');
-      player.setAttribute('aria-hidden', 'false');
-      scheduleMinimize(3500);
-      tryPlay(lofiAudio);
-    }, 60000);
-
-    const onEnter = () => {
-      if (minimizeTimer) clearTimeout(minimizeTimer);
-    };
-    const onLeave = () => scheduleMinimize(1500);
-    player?.addEventListener('mouseenter', onEnter);
-    player?.addEventListener('mouseleave', onLeave);
-
-    const onPlay = () => {
-      if (!player) return;
-      const isPaused = player.classList.toggle('is-paused');
-      const isMetal = player.classList.contains('is-metal');
-      const current = isMetal ? metalAudio : lofiAudio;
-      if (!current) return;
-      if (isPaused) current.pause();
-      else tryPlay(current);
-    };
-    playBtn?.addEventListener('click', onPlay);
-
-    const onNext = () => {
-      if (!player) return;
-      player.classList.add('is-metal');
-      player.classList.remove('is-paused');
-      if (minimizeTimer) clearTimeout(minimizeTimer);
-      if (lofiAudio) {
-        lofiAudio.pause();
-        lofiAudio.currentTime = 0;
-      }
-      if (progressFill) progressFill.style.width = '0%';
-      tryPlay(metalAudio);
-    };
-    nextBtn?.addEventListener('click', onNext);
-
-    const onClose = () => {
-      if (!player) return;
-      player.classList.remove('is-visible');
-      player.setAttribute('aria-hidden', 'true');
-      if (minimizeTimer) clearTimeout(minimizeTimer);
-      lofiAudio?.pause();
-      metalAudio?.pause();
-    };
-    closeBtn?.addEventListener('click', onClose);
-
-    const onTimeUpdate = (e: Event) => {
-      const audio = e.target as HTMLAudioElement;
-      if (audio !== currentAudio() || !progressFill) return;
-      const ratio = audio.duration ? Math.min(1, audio.currentTime / audio.duration) : 0;
-      progressFill.style.width = `${ratio * 100}%`;
-    };
-    lofiAudio?.addEventListener('timeupdate', onTimeUpdate);
-    metalAudio?.addEventListener('timeupdate', onTimeUpdate);
-
-    const onBarClick = (e: MouseEvent) => {
-      const audio = currentAudio();
-      if (!progressBar || !audio || !audio.duration) return;
-      const r = progressBar.getBoundingClientRect();
-      const ratio = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
-      audio.currentTime = ratio * audio.duration;
-    };
-    progressBar?.addEventListener('click', onBarClick);
-
-    const onLoopToggle = () => {
-      if (!player) return;
-      const turningOff = !player.classList.contains('is-no-loop');
-      player.classList.toggle('is-no-loop', turningOff);
-      const loopOn = !turningOff;
-      if (lofiAudio) lofiAudio.loop = loopOn;
-      if (metalAudio) metalAudio.loop = loopOn;
-    };
-    loopBtn?.addEventListener('click', onLoopToggle);
-
-    // Fires only when loop=false. Advance to the other track and play.
-    const onEnded = () => {
-      if (!player) return;
-      const goingToMetal = !player.classList.contains('is-metal');
-      player.classList.toggle('is-metal', goingToMetal);
-      player.classList.remove('is-paused');
-      const finished = otherAudio();
-      const next = currentAudio();
-      if (finished) {
-        finished.pause();
-        finished.currentTime = 0;
-      }
-      if (next) {
-        next.currentTime = 0;
-        if (progressFill) progressFill.style.width = '0%';
-        tryPlay(next);
-      }
-    };
-    lofiAudio?.addEventListener('ended', onEnded);
-    metalAudio?.addEventListener('ended', onEnded);
-
     return () => {
       io.disconnect();
       cardHandlers.forEach((handler, card) =>
         card.removeEventListener('mousemove', handler)
       );
-      window.removeEventListener('scroll', onScroll);
       if (hs && hsScrollHandler) hs.removeEventListener('scroll', hsScrollHandler);
       if (hsResizeHandler) window.removeEventListener('resize', hsResizeHandler);
       hscrollBtnHandlers.forEach((handler, btn) =>
         btn.removeEventListener('click', handler)
       );
-      player?.removeEventListener('mouseenter', onEnter);
-      player?.removeEventListener('mouseleave', onLeave);
-      playBtn?.removeEventListener('click', onPlay);
-      nextBtn?.removeEventListener('click', onNext);
-      loopBtn?.removeEventListener('click', onLoopToggle);
-      closeBtn?.removeEventListener('click', onClose);
-      progressBar?.removeEventListener('click', onBarClick);
-      lofiAudio?.removeEventListener('timeupdate', onTimeUpdate);
-      metalAudio?.removeEventListener('timeupdate', onTimeUpdate);
-      lofiAudio?.removeEventListener('ended', onEnded);
-      metalAudio?.removeEventListener('ended', onEnded);
-      if (minimizeTimer) clearTimeout(minimizeTimer);
-      if (appearTimer) clearTimeout(appearTimer);
     };
   }, []);
 
   return (
     <>
-      <div className="grain" aria-hidden="true"></div>
 
-      {/* NAV */}
+      {/* NAV + HERO: together fill the first viewport */}
+      <div className="fold">
       <nav className="nav">
         <Link href="/" className="nav-name" aria-label="Prathmesh Ingole">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -364,6 +184,7 @@ export default function Home() {
           <a href="#journey">Quest log</a>
         </div>
         <div className="nav-cta">
+          <ThemeToggle />
           <a href="/Prathmesh_Ingole_Resume.pdf" className="btn btn-ghost" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 3v12" />
@@ -383,31 +204,23 @@ export default function Home() {
       </nav>
 
       {/* HERO */}
-      <header className="hero">
-        <div className="ambient" aria-hidden="true">
-          <div className="squircle s1"></div>
-          <div className="squircle s2"></div>
-          <div className="squircle s3"></div>
-          <div className="squircle s4"></div>
+      <div className="desk">
+        <div className="desk-glow" aria-hidden="true"></div>
+        <header className="hero">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/desk/cutting-mat.svg" alt="" className="mat" draggable={false} />
+          <div className="hero-inner"></div>
+        </header>
+        <DeskPlant />
+        {/* Placeholder until the lamp render is ready: public/desk/lamp.png */}
+        <div className="desk-obj desk-lamp" aria-hidden="true">lamp.png</div>
+        {/* Sun through a window off to the left: frame shadows and foliage drifting over the desk */}
+        <div className="desk-sun" aria-hidden="true">
+          <div className="desk-sun-window"><div className="desk-sun-panes"></div></div>
+          <div className="desk-sun-leaves"></div>
         </div>
-        <div className="wrap hero-inner reveal">
-          <span className="status-chip">
-            <span className="dot"></span>Available for interesting problems
-          </span>
-          <h1>
-            Design. Architect. <span className="dim">Engineer.</span>
-          </h1>
-          <p className="hero-sub">
-            Software engineer currently building the next big surety platform at SuretyNow. I build for the fun of building — fluent with AI agents as a daily tool, pairing, scaffolding, refactoring.
-          </p>
-          <div className="hero-meta">
-            <span><strong>Pune, India</strong>IST / UTC +5:30</span>
-            <span><strong>SuretyNow</strong>Software Engineer</span>
-            <span><strong>B.E. CE, IIIT Pune</strong>SGPA 8.72</span>
-            <span><strong>13+ projects</strong>Shipped &amp; scrappy</span>
-          </div>
-        </div>
-      </header>
+      </div>
+      </div>
 
       {/* WORK / PROJECTS */}
       <section id="work">
@@ -664,57 +477,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* AMBIENT PLAYER */}
-      <div id="player" className="player" aria-hidden="true">
-        <div className="player-disc" aria-label="Now playing">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="player-art current" src="/lofi-cover.jpg" alt="" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="player-art swap" src="/metal-cover.webp" alt="" />
-          <div className="player-spindle"></div>
-        </div>
-        <div className="player-body">
-          <div className="player-meta">
-            <div className="player-label">Now playing</div>
-            <div className="player-track current">Lofi Loft — endless beats</div>
-            <div className="player-track swap">Death — The Sound of Perseverance</div>
-            <div className="player-bar">
-              <span className="player-bar-fill"></span>
-            </div>
-          </div>
-          <div className="player-controls">
-            <button className="player-btn" id="player-play" aria-label="Pause">
-              <svg className="ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <rect x="6" y="5" width="4" height="14" rx="1" />
-                <rect x="14" y="5" width="4" height="14" rx="1" />
-              </svg>
-              <svg className="ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M7 5v14l12-7z" />
-              </svg>
-            </button>
-            <button className="player-btn player-loop" id="player-loop" aria-label="Toggle loop">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="m17 2 4 4-4 4" />
-                <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
-                <path d="m7 22-4-4 4-4" />
-                <path d="M21 13v1a4 4 0 0 1-4 4H3" />
-              </svg>
-            </button>
-            <button className="player-btn player-next" id="player-next" aria-label="Skip to real music">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M6 5v14l10-7zM17 5h2v14h-2z" />
-              </svg>
-            </button>
-            <div className="player-next-tip" aria-hidden="true">
-              I don&apos;t care about this soothing music, I want real music.
-            </div>
-          </div>
-        </div>
-        <button className="player-close" id="player-close" aria-label="Close player">×</button>
-      </div>
-
-      <audio ref={lofiAudioRef} src="/lofi.mp3" preload="none" />
-      <audio ref={metalAudioRef} src="/metal.mp3" preload="none" />
     </>
   );
 }
