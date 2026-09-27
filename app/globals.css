@@ -236,6 +236,35 @@ button { background: none; border: 0; color: inherit; font: inherit; cursor: poi
 
 /* ====== Desk (top-down scene under the nav) ====== */
 .desk {
+  /* Mat size drives everything else on the desk (lamp size, light pool). See .hero for how it is derived. */
+  --mat-tilt: 13deg;
+  --mat-bleed: 20px;
+  --mat-gap: 12px;
+  --mat-ratio: 0.75; /* height / width: the SVG mat is 4:3; the photo mat overrides this below */
+  --mat-w: min(
+    calc((100svh - 80px - var(--mat-gap)) / (sin(var(--mat-tilt)) + var(--mat-ratio) * cos(var(--mat-tilt)))),
+    calc((100vw + var(--mat-bleed) - 40px) / (cos(var(--mat-tilt)) + var(--mat-ratio) * sin(var(--mat-tilt)))),
+    1400px
+  );
+  --mat-h: calc(var(--mat-w) * var(--mat-ratio));
+  /* Lamp: render box in the top-left corner; the cap is roughly 2/3 of the box.
+     Everything below is live-tunable from the dev panel (app/desk-tuner.tsx). */
+  --lamp-scale: 0.635; /* box width as a fraction of the mat width */
+  --lamp-w: calc(var(--mat-w) * var(--lamp-scale));
+  --lamp-x: -326px; /* negative: the box hangs off the top-left corner, the cap sits in the corner */
+  --lamp-y: -274px;
+  --lamp-rgb: 240 126 20; /* colour of the light pool on the desk (#f07e14) */
+  --lamp-pool: 3; /* pool diameter, in lamp widths */
+  --lamp-pool-a: 0.34; /* pool strength at the centre */
+  --lamp-halo: 1.75; /* bright halo diameter, in lamp widths */
+  --lamp-halo-a: 0.9;
+  /* Plant: pot sits just off the bottom-left corner, only its rim shows */
+  --plant-w: 1800px;
+  --plant-x: -836px;
+  --plant-y: -902px; /* from the bottom edge */
+  --plant-bright: 0.8;
+  --plant-sat: 1.15;
+  --plant-hue: 10deg;
   position: relative;
   flex: 1;
   display: flex;
@@ -249,67 +278,112 @@ button { background: none; border: 0; color: inherit; font: inherit; cursor: poi
   background: var(--bg);
 }
 
-/* Lamp light pooling on the desk from the top-left corner */
+/* Warm light the lamp throws on the desk. Both layers fade with data-lamp="off" on .desk
+   (set by app/desk-lamp-three.tsx). Centre = the lamp cap. */
 .desk-glow {
   position: absolute;
   z-index: 4;
-  left: 120px;
-  top: 90px;
-  width: 720px;
-  height: 720px;
+  left: calc(var(--lamp-x) + var(--lamp-w) * 0.5);
+  top: calc(var(--lamp-y) + var(--lamp-w) * 0.55);
+  width: calc(var(--lamp-w) * var(--lamp-pool));
+  height: calc(var(--lamp-w) * var(--lamp-pool));
   transform: translate(-50%, -50%);
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(255, 220, 160, 0.55) 0%, rgba(255, 220, 160, 0.2) 35%, transparent 68%);
-  mix-blend-mode: soft-light;
+  /* multiply: a warm tint on the white desk (screen/soft-light cannot colour white) */
+  background: radial-gradient(
+    circle,
+    rgb(var(--lamp-rgb) / var(--lamp-pool-a)) 0%,
+    rgb(var(--lamp-rgb) / calc(var(--lamp-pool-a) * 0.4)) 38%,
+    transparent 70%
+  );
+  mix-blend-mode: multiply;
+  transition: opacity 0.45s ease;
 }
 
 :root[data-theme="dark"] .desk-glow {
   mix-blend-mode: screen;
-  background: radial-gradient(circle, rgba(255, 205, 130, 0.5) 0%, rgba(255, 205, 130, 0.16) 35%, transparent 68%);
+  background: radial-gradient(
+    circle,
+    rgb(var(--lamp-rgb) / calc(var(--lamp-pool-a) * 0.9)) 0%,
+    rgb(var(--lamp-rgb) / calc(var(--lamp-pool-a) * 0.33)) 38%,
+    transparent 70%
+  );
 }
 
-/* Objects on the desk (dashed placeholders until the renders land) */
-.desk-obj {
+/* Bright halo right around the lamp: lifts its own cast shadow and glows in dark theme */
+.desk-lamp-halo {
   position: absolute;
-  display: grid;
-  place-items: center;
+  z-index: 6;
+  left: calc(var(--lamp-x) + var(--lamp-w) * 0.5);
+  top: calc(var(--lamp-y) + var(--lamp-w) * 0.5);
+  width: calc(var(--lamp-w) * var(--lamp-halo));
+  height: calc(var(--lamp-w) * var(--lamp-halo));
+  transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 2px dashed rgba(255, 255, 255, 0.75);
-  background: rgba(0, 0, 0, 0.12);
-  color: #fff;
-  font-size: 12px;
-  letter-spacing: 0.02em;
   pointer-events: none;
-  filter: drop-shadow(10px 14px 12px rgba(0, 0, 0, 0.35));
+  /* a paler version of the pool colour, so one colour control drives both */
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, rgb(var(--lamp-rgb) / var(--lamp-halo-a)), rgb(255 255 255 / var(--lamp-halo-a)) 55%) 0%,
+    color-mix(in srgb, rgb(var(--lamp-rgb) / calc(var(--lamp-halo-a) * 0.4)), rgb(255 255 255 / calc(var(--lamp-halo-a) * 0.4)) 30%) 30%,
+    transparent 62%
+  );
+  mix-blend-mode: screen;
+  transition: opacity 0.45s ease;
 }
 
+.desk[data-lamp="off"] .desk-glow,
+.desk[data-lamp="off"] .desk-lamp-halo {
+  opacity: 0;
+}
+
+/* The lamp itself (three.js canvas, clickable) */
 .desk-lamp {
+  position: absolute;
   z-index: 6;
-  left: 36px;
-  top: 28px;
-  width: 190px;
-  height: 190px;
+  left: var(--lamp-x);
+  top: var(--lamp-y);
+  width: var(--lamp-w);
+  height: var(--lamp-w);
+  background: transparent;
+  outline: none;
+  /* sun is off to the left: cast shadow to the right, like the plant */
+  filter: drop-shadow(44px 20px 12px rgba(40, 28, 14, 0.45));
+}
+.desk-lamp:focus-visible {
+  outline: 2px dashed rgba(0, 0, 0, 0.45);
+  outline-offset: -10px;
+  border-radius: 50%;
+}
+.desk-lamp > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .desk-plant {
   position: absolute;
   z-index: 5;
-  /* pot sits just off the bottom-left corner, only its rim shows */
-  left: -836px;
-  bottom: -902px;
-  width: 1800px;
-  height: 1800px;
+  /* placement and grade come from --plant-* on .desk (live-tunable from the dev panel) */
+  left: var(--plant-x);
+  bottom: var(--plant-y);
+  width: var(--plant-w);
+  height: var(--plant-w);
   pointer-events: none;
   background: transparent;
-  --poster-color: transparent;
-  --progress-bar-color: transparent;
   /* deeper, darker green than the raw render; sun is off to the left, so the leaves throw a long soft shadow to the right */
-  filter: brightness(0.8) saturate(1.15) hue-rotate(10deg) drop-shadow(64px 26px 14px rgba(40, 28, 14, 0.5));
+  filter: brightness(var(--plant-bright)) saturate(var(--plant-sat)) hue-rotate(var(--plant-hue))
+    drop-shadow(64px 26px 14px rgba(40, 28, 14, 0.5));
+}
+.desk-plant > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 700px) {
-  .desk-obj, .desk-plant { display: none; }
+  .desk-plant, .desk-lamp, .desk-lamp-halo, .desk-glow { display: none; }
 }
 
 
@@ -472,23 +546,14 @@ button { background: none; border: 0; color: inherit; font: inherit; cursor: poi
 /* ====== Hero (the cutting mat) ====== */
 .hero {
   /*
-   * 4:3 mat, tilted. Sized from the viewport so the rotated bounding box
+   * Mat (--mat-ratio tall), tilted. Sized from the viewport so the rotated bounding box
    * fills the desk height (minus a small top gap), sits flush with the
    * bottom of the fold, and its bottom-right corner runs 20px off-screen.
    */
-  --mat-tilt: 13deg;
-  --mat-bleed: 20px;
-  --mat-gap: 12px;
-  --mat-w: min(
-    calc((100svh - 80px - var(--mat-gap)) / (sin(var(--mat-tilt)) + 0.75 * cos(var(--mat-tilt)))),
-    calc((100vw + var(--mat-bleed) - 40px) / (cos(var(--mat-tilt)) + 0.75 * sin(var(--mat-tilt)))),
-    1400px
-  );
-  --mat-h: calc(var(--mat-w) * 0.75);
   position: absolute;
   z-index: 3;
   width: var(--mat-w);
-  aspect-ratio: 4 / 3;
+  height: var(--mat-h);
   /* offsets convert the rotated bounding box back to the unrotated box */
   right: calc((var(--mat-w) * (cos(var(--mat-tilt)) - 1) + var(--mat-h) * sin(var(--mat-tilt))) / 2 - var(--mat-bleed));
   bottom: calc((var(--mat-w) * sin(var(--mat-tilt)) + var(--mat-h) * (cos(var(--mat-tilt)) - 1)) / 2);
@@ -506,6 +571,20 @@ button { background: none; border: 0; color: inherit; font: inherit; cursor: poi
   height: 100%;
   object-fit: cover;
   user-select: none;
+}
+/* Two mats to choose from (dev tuner "Mat" switch sets data-mat on .desk): the drawn SVG (default)
+   or the photo. Hard-code the winner by deleting the other <img> in page.tsx and this block. */
+.mat-photo {
+  display: none;
+}
+.desk[data-mat="photo"] {
+  --mat-ratio: 0.6556; /* public/desk/cutting-mat-photo.webp is 2131 x 1397 */
+}
+.desk[data-mat="photo"] .mat-svg {
+  display: none;
+}
+.desk[data-mat="photo"] .mat-photo {
+  display: block;
 }
 
 /* Wear on the mat: fine grain, then blotchy discolouration and darker edges. */

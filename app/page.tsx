@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import { selectedWork, sideQuests, type Project } from './projects/projects-data';
 import { mainVisuals, miniVisuals, cardAnimClass } from './projects/visuals';
 import ThemeToggle from './theme-toggle';
-import DeskPlant from './desk-plant';
+import DeskPlant from './desk-plant-three';
+import DeskLamp from './desk-lamp-three';
+import DeskTuner from './desk-tuner';
 
 function ProjectCard({ project }: { project: Project }) {
   const sizeClass = project.card.size ? ` ${project.card.size}` : '';
@@ -205,15 +207,18 @@ export default function Home() {
 
       {/* HERO */}
       <div className="desk">
-        <div className="desk-glow" aria-hidden="true"></div>
         <header className="hero">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/desk/cutting-mat.svg" alt="" className="mat" draggable={false} />
+          <img src="/desk/cutting-mat.svg" alt="" className="mat mat-svg" draggable={false} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/desk/cutting-mat-photo.webp" alt="" className="mat mat-photo" loading="lazy" draggable={false} />
           <div className="hero-inner"></div>
         </header>
         <DeskPlant />
-        {/* Placeholder until the lamp render is ready: public/desk/lamp.png */}
-        <div className="desk-obj desk-lamp" aria-hidden="true">lamp.png</div>
+        {/* Lamp: click to switch; renders its own light pool (.desk-glow, .desk-lamp-halo) */}
+        <DeskLamp />
+        {/* Dev-only tuning panel (sliders for lamp/plant placement, camera, light, wind; copies a config JSON) */}
+        {process.env.NODE_ENV === 'development' && <DeskTuner />}
         {/* Sun through a window off to the left: frame shadows and foliage drifting over the desk */}
         <div className="desk-sun" aria-hidden="true">
           <div className="desk-sun-window"><div className="desk-sun-panes"></div></div>

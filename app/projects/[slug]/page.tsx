@@ -112,16 +112,18 @@ export default async function ProjectPage({
             </div>
           </div>
 
-          <div className="project-screens reveal">
-            <div className="screens-track">
-              {project.page.screens.map((s, i) => (
-                <a key={i} className="screen-card" href={s.src} target="_blank" rel="noopener noreferrer">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.src} alt={s.alt} loading="lazy" />
-                </a>
-              ))}
+          {project.page.screens && project.page.screens.length > 0 && (
+            <div className="project-screens reveal">
+              <div className="screens-track">
+                {project.page.screens.map((s, i) => (
+                  <a key={i} className="screen-card" href={s.src} target="_blank" rel="noopener noreferrer">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={s.src} alt={s.alt} loading="lazy" />
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </header>
 

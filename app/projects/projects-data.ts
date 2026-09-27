@@ -20,7 +20,7 @@ export type ProjectPage = {
   title: string[];
   subtitle: string;
   meta: { year: string; role: string; stack: string; status: string };
-  screens: { src: string; alt: string }[];
+  screens?: { src: string; alt: string }[]; // optional: sort-alyzer has no screenshots yet
   sections: Section[];
 };
 
